@@ -1,0 +1,18 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+html {
+    font-family: "Google Sans";
+    font-size: 1rem;
+}
+
+body {
+    min-height: 100vh;
+    background-color: #fff;
+    color: #000;
+    display: grid;
+    place-content: center;
+}

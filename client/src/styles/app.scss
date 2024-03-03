@@ -1,0 +1,28 @@
+/* Bootstrap Theme */
+$theme-colors: (
+  "primary": #6666bc,
+);
+
+/* Fonts */
+@font-face {
+  font-family: 'Unicorn';
+  src: url('../fonts/unicorn.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Google Sans';
+  src: url('../fonts/ProductSans-Light.ttf') format('truetype');
+}
+
+.body{
+  font-family: 'Google Sans';
+}
+
+.logo {
+  font-family: 'Unicorn', sans-serif;
+  font-size: 4em;
+  font-weight: normal;
+  color: map-get($theme-colors, "primary");
+}
+
+/* Imports */
+@import "node_modules/bootstrap/scss/bootstrap";

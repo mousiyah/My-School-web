@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .btn-primary {
+      @apply bg-primary text-white py-2 px-4 rounded-md hover:bg-primary-dark;
+    }
+
+    .btn-round{
+      @apply rounded-full py-2.5;
+    }
+
+    .card{
+      @apply max-w-md bg-white border border-gray-300 rounded-md shadow-sm relative;
+    }
+  }
