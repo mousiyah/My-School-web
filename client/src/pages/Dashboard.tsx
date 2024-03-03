@@ -6,7 +6,6 @@ import Diary from '../partials/Diary';
 
 const Dashboard: React.FC = () => {
 
-  const SidebarSize = 72;
   const [isSidebarOpen, setSidebarOpen] = useState(true);
 
   const toggleSidebar = () => {
@@ -19,10 +18,9 @@ const Dashboard: React.FC = () => {
       <Topbar onToggleSidebar={toggleSidebar} />
 
       <div className="flex flex-1">
-        <Sidebar  isOpen={isSidebarOpen} size={SidebarSize}/>
+        <Sidebar  isOpen={isSidebarOpen} />
 
-        <div className={`w-full h-full
-                        transition-all duration-300 ease-in-out }`}>
+        <div className="w-full h-full">
                           
           <Diary />
 

@@ -11,16 +11,15 @@ import SidebarButton from '../components/SidebarButton';
 
 interface SidebarProps {
   isOpen?: boolean;
-  size: number;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ isOpen, size }) => {
-  const sidebarWidth = isOpen ? size : size/2;
+const Sidebar: React.FC<SidebarProps> = ({ isOpen}) => {
 
   return (
     <div
-      className={`bg-white py-2 pr-2 border-r border-gray-300 
-                  w-${sidebarWidth} h-full`}>
+      className={`bg-white py-2 pr-2 border-r border-gray-300
+                  transition-all duration-100 ease-in-out
+                  ${isOpen ? 'w-72' : 'w-24'} h-full`}>
 
       <SidebarButton icon={AiOutlineHome} name="Home" selected={false} showText={isOpen} />
       <SidebarButton icon={IoBookOutline} name="Diary" selected={true} showText={isOpen} />
