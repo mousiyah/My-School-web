@@ -9,7 +9,7 @@ import { MdEmail, MdLock } from 'react-icons/md';
 const LoginPage = () => {
   return (
     <div className="flex items-center justify-center h-screen">
-      <div className="card text-center p-4">
+      <div className="card w-fit text-center p-4">
 
         <img src={visual} alt="School" className="w-1/3 mx-auto" />
 
