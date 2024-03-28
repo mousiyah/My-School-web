@@ -20,9 +20,9 @@ const Diary: React.FC = () => {
       selectedDate={selectedDate}
       setSelectedDate={setSelectedDate}/>
 
-      <div className="flex">
+      <div className="w-full flex">
         {[...Array(6)].map((_, index) => (
-          <DiaryDay key={index} weekIndex={index} />
+          <DiaryDay key={index} weekIndex={index} selectedDate={selectedDate} />
         ))}
       </div>
 

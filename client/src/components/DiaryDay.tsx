@@ -1,31 +1,40 @@
 import React from 'react';
-
 import DiaryEntry from './DiaryEntry';
 
-const DiaryDay: React.FC<{weekIndex: number}> = ({weekIndex}) => {
+const DiaryDay: React.FC<{ weekIndex: number; selectedDate: Date }> = ({
+  weekIndex,
+  selectedDate,
+}) => {
+  const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
-  const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  // Calculate the date for the day of the week
+  const currentDate = new Date(selectedDate);
+  currentDate.setDate(selectedDate.getDate() - selectedDate.getDay() + 1 + weekIndex);
+
+  const formattedDate = currentDate.toLocaleDateString('en-GB', {
+    day: 'numeric',
+    month: 'short',
+  });
+
+  const isCurrentDate = () => {
+    const today = new Date();
+    return currentDate.toDateString() === today.toDateString();
+  };
+
 
   return (
-    <div className="card w-fit text-sm m-2">
-
-
-      <div className="flex justify-between bg-primary text-white p-2 rounded-t-md">
+    <div className={`w-full text-sm border ${isCurrentDate() ? 'bg-gray-100' : 'bg-white'}`}>
+      <div className={`flex justify-between text-white py-3 px-3 ${isCurrentDate() ? 'bg-primary-dark' : 'bg-primary'}`}>
         <span>{days[weekIndex]}</span>
-        <span>19 Feb</span>
+        <span>{formattedDate}</span>
       </div>
-
-
       <DiaryEntry />
       <DiaryEntry />
       <DiaryEntry />
       <DiaryEntry />
       <DiaryEntry />
-
-      </div>
+    </div>
   );
 };
 
-
 export default DiaryDay;
-

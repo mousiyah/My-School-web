@@ -57,7 +57,7 @@ const DiaryDatePicker: React.FC<DiaryDatePickerProps> = ({
           <button onClick={handlePrevWeek}>
             <IoIosArrowBack className="text-2xl" />
           </button>
-          <button onClick={() => setIsDatePickerOpen(!isDatePickerOpen)} className="relative mx-2">
+          <button onClick={() => setIsDatePickerOpen(!isDatePickerOpen)} className="relative mx-2 btn-white w-96">
             <div>{getWeekRange(selectedDate)}</div>
             {isDatePickerOpen && (
               <div className="absolute top-full z-50">
