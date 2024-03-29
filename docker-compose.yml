@@ -3,6 +3,7 @@ version: '3'
 services:
   postgres:
     image: postgres:latest
+    container_name: postgres
     env_file: .env
     environment:
       POSTGRES_USER: ${DB_USER}
@@ -16,6 +17,7 @@ services:
   server:
     build:
       context: ./server
+    container_name: server
     ports:
       - "9000:9000"
     env_file: .env
@@ -29,6 +31,7 @@ services:
   client:
     build:
       context: ./client
+    container_name: client
     ports:
       - "3000:3000"
     volumes:

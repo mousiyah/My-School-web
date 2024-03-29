@@ -4,9 +4,17 @@ interface InputWithIconProps {
   icon: ReactNode;
   placeholder: string;
   type: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const InputWithIcon: React.FC<InputWithIconProps> = ({ icon, placeholder, type}) => {
+const InputWithIcon: React.FC<InputWithIconProps> = ({
+  icon,
+  placeholder,
+  type,
+  value,
+  onChange,
+}) => {
   return (
     <div className="relative p-2 m-2 border rounded-md">
       {icon && (
@@ -14,7 +22,13 @@ const InputWithIcon: React.FC<InputWithIconProps> = ({ icon, placeholder, type})
           {icon}
         </div>
       )}
-      <input type={type} placeholder={placeholder} className="border-none outline-none pl-10 w-full" />
+      <input
+        type={type}
+        placeholder={placeholder}
+        className="border-none outline-none pl-10 w-full"
+        value={value}
+        onChange={onChange}
+      />
     </div>
   );
 };
