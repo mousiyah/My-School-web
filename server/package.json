@@ -6,11 +6,16 @@
   "scripts": {
     "start": "node server",
     "dev": "nodemon server",
-    "prisma-migrate-dev": "docker exec $(docker-compose ps -q server) npx prisma migrate dev"
+    "prisma-migrate-dev": "docker exec $(docker-compose ps -q server) npx prisma migrate dev",
+    "prisma-seed": "docker exec $(docker-compose ps -q server) node prisma/seed.js"
+  },
+  "prisma": {
+    "seed": "docker exec $(docker-compose ps -q server) node prisma/seed.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@faker-js/faker": "^8.4.1",
     "@prisma/client": "^5.11.0",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
@@ -23,6 +28,7 @@
     "uuid": "^9.0.1"
   },
   "devDependencies": {
+    "faker": "^5.5.3",
     "prisma": "^5.11.0"
   }
 }

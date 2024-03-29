@@ -6,7 +6,7 @@ import InputBox from '../components/InputWithIcon.tsx';
 import visual from '../assets/visual_login.png';
 import { MdEmail, MdLock } from 'react-icons/md';
 
-import { login } from '../services/auth';
+import axios from 'axios';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -27,12 +27,13 @@ const LoginPage = () => {
     if (!validateForm()) return;
 
     try {
-      const user = await login(email, password);
-      console.log('Login successful:', user);
+      const response = await axios.post('login', { email, password });
+      setError("logged in", response.data.email);
+      console.log('Login successful');
       // Redirect user to dashboard
     } catch (error) {
       console.error('Login failed:', error.message);
-      setError(error.message);
+      setError(error.response.data.error);
     }
   };
 

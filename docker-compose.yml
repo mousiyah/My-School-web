@@ -4,11 +4,13 @@ services:
   postgres:
     image: postgres:latest
     container_name: postgres
+    restart: unless-stopped
     env_file: .env
     environment:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_HOST_AUTH_METHOD: = trust
     ports:
       - "5432:5432"
     networks:
@@ -21,6 +23,11 @@ services:
     ports:
       - "9000:9000"
     env_file: .env
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_DATABASE: ${DB_DATABASE}
     depends_on:
       - postgres
     volumes:
