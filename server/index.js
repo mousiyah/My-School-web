@@ -7,15 +7,10 @@ const errorHandler = require('./utils/errorHandler')
 const cookieParser = require('cookie-parser')
 const cors = require('cors')
 const corsOptions = require('./config/corsOptions')
-const pool = require('./config/db');
 const fs = require('fs');
+const sequelize = require('./config/db');
 
 const PORT = process.env.SERVER_PORT
-
-app.use((req, res, next) => {
-    req.db = pool;
-    next();
-});
 
 app.use(logger)
 
@@ -24,6 +19,18 @@ app.use(cors(corsOptions))
 app.use(express.json())
 
 app.use(cookieParser())
+
+
+// Sequalize database
+async function main() {
+    try {
+      await sequelize.sync({ alter: true });
+      console.log('Database synchronized successfully.');
+    } catch (error) {
+      console.error('Error syncing database:', error);
+    }
+  }
+
 
 app.use('/', express.static(path.join(__dirname, 'public')))
 

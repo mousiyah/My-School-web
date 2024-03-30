@@ -6,7 +6,7 @@ COPY . .
 
 RUN chown -R node:node .
 
-USER node
+USER root
 
 RUN npm install
 

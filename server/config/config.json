@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "musi",
+    "password": "dO4PIYgmI0NMJSo",
+    "database": "myschool",
+    "host": "postgres",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "musi",
+    "password": "dO4PIYgmI0NMJSo",
+    "database": "myschool",
+    "host": "postgres",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "root",
+    "password": null,
+    "database": "database_production",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+}

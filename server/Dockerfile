@@ -6,9 +6,11 @@ COPY . .
 
 RUN chown -R node:node .
 
-USER node
+USER root
 
 RUN npm install
+
+RUN npm install -g sequelize-cli
 
 EXPOSE 9000
 

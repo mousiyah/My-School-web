@@ -4,17 +4,19 @@ services:
   postgres:
     image: postgres:latest
     container_name: postgres
-    restart: unless-stopped
-    env_file: .env
+    restart: always
+    env_file:
+      - .env
     environment:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_DATABASE}
-      POSTGRES_HOST_AUTH_METHOD: = trust
     ports:
       - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
     networks:
-      - main
+      - web
 
   server:
     build:
@@ -22,9 +24,10 @@ services:
     container_name: server
     ports:
       - "9000:9000"
-    env_file: .env
+    env_file:
+      - .env
     environment:
-      DB_HOST: ${DB_HOST}
+      DB_HOSTNAME: ${DB_HOST}
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
       DB_DATABASE: ${DB_DATABASE}
@@ -33,7 +36,7 @@ services:
     volumes:
       - ./server:/home/node/app
     networks:
-      - main
+      - web
 
   client:
     build:
@@ -44,8 +47,26 @@ services:
     volumes:
       - ./client:/app
     networks:
-      - main
+      - web
+  
+  pgadmin:
+    container_name: pgadmin
+    links: 
+      - postgres
+    image: dpage/pgadmin4
+    ports:
+      - "8080:80"
+    env_file:
+      - .env
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    networks:
+      - web
+
+volumes:
+  db-data:
 
 networks:
-  main:
+  web:
     driver: bridge
