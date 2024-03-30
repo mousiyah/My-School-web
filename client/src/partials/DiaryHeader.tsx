@@ -55,7 +55,7 @@ const DiaryDatePicker: React.FC<DiaryDatePickerProps> = ({
         <div className="flex w-full justify-between items-center mb-4 px-4">
         <div className="flex items-center mx-auto">
           <button onClick={handlePrevWeek}>
-            <IoIosArrowBack className="text-2xl" />
+            <IoIosArrowBack/>
           </button>
           <button onClick={() => setIsDatePickerOpen(!isDatePickerOpen)} className="relative mx-2 btn-white w-96">
             <div>{getWeekRange(selectedDate)}</div>
@@ -74,7 +74,7 @@ const DiaryDatePicker: React.FC<DiaryDatePickerProps> = ({
             )}
           </button>
           <button onClick={handleNextWeek}>
-            <IoIosArrowForward className="text-2xl" />
+            <IoIosArrowForward/>
           </button>
         </div>
         <button className="btn-white" onClick={() => handleDateChange(new Date())}>

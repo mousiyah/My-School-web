@@ -7,7 +7,7 @@ module.exports = {
     const users = [];
     const numUsers = 1;
 
-    const email = "a@a";
+    const email = "2130288@myschool.co.uk";
     const password = "12345";
     const hashedpassword = await bcrypt.hash(password, 10);
 
