@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 
-import Topbar from '../partials/Topbar';
-import Sidebar from '../partials/Sidebar';
-import Diary from '../partials/Diary';
+import Topbar from './Topbar';
+import Sidebar from './Sidebar';
+import Diary from './Diary';
 
 const Dashboard: React.FC = () => {
 

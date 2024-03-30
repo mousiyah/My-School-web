@@ -7,7 +7,7 @@ import { PiNotebookLight } from "react-icons/pi";
 import { GoCommentDiscussion } from "react-icons/go";
 import { CiMail } from "react-icons/ci";
 
-import SidebarButton from '../components/SidebarButton';
+import SidebarButton from './SidebarButton';
 
 interface SidebarProps {
   isOpen?: boolean;

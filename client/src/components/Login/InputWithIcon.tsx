@@ -4,6 +4,7 @@ interface InputWithIconProps {
   icon: ReactNode;
   placeholder: string;
   type: string;
+  name: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
@@ -12,6 +13,7 @@ const InputWithIcon: React.FC<InputWithIconProps> = ({
   icon,
   placeholder,
   type,
+  name,
   value,
   onChange,
 }) => {
@@ -24,6 +26,7 @@ const InputWithIcon: React.FC<InputWithIconProps> = ({
       )}
       <input
         type={type}
+        name={name}
         placeholder={placeholder}
         className="border-none outline-none pl-10 w-full"
         value={value}

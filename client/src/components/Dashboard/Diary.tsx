@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import DiaryDay from '../components/DiaryDay';
+import DiaryDay from './DiaryDay';
 import DiaryDatePicker from './DiaryHeader';
 
 import 'react-datepicker/dist/react-datepicker.css';

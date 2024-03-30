@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import Logo from '../components/Logo';
-
-import { signout } from '../utils/auth'; 
+import Logo from '../Logo';
+import { useAuth } from '../../utils/auth';
 
 import { MdMenu } from 'react-icons/md';
 import { IoIosArrowDown } from "react-icons/io";
@@ -11,6 +10,7 @@ interface TopbarProps {
 }
 
 const Topbar: React.FC<TopbarProps> = ({ onToggleSidebar }) => {
+  const { signout } = useAuth();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const toggleDropdown = () => {
@@ -61,7 +61,7 @@ const Topbar: React.FC<TopbarProps> = ({ onToggleSidebar }) => {
               </button>
 
               <button 
-                onClick={ signout }
+                onClick={signout}
                 className="block px-7 py-2 pb-3 hover:bg-gray-100 rounded-b-lg w-full text-left">
                 Sign out
               </button>

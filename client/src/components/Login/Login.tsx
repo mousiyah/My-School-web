@@ -1,20 +1,17 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-
-import { login } from '../utils/auth';
-
-import InputBox from '../components/InputWithIcon.tsx';
-
-import Logo from '../components/Logo.tsx';
-import visual from '../assets/visual_login.png';
+import { useAuth } from '../../utils/auth';
+import InputBox from './InputWithIcon';
+import Logo from '../Logo.tsx';
+import visual from '../../assets/visual_login.png';
 import { FaArrowLeft } from "react-icons/fa";
 import { MdEmail, MdLock } from 'react-icons/md';
 
-const LoginPage = () => {
+const Login = () => {
+  const { signin, userExists } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [userExists, setUserExists] = useState(false);
+  const [emailEntered, setEmailEntered] = useState(false);
   const [loginSuccess, setLoginSuccess] = useState(false);
 
   const validateForm = () => {
@@ -30,17 +27,12 @@ const LoginPage = () => {
     e.preventDefault();
     if (!validateForm()) return;
 
-    try {
-      const response = await axios.post('user-exists', { email });
-      if (response.data.exists) {
-        setUserExists(true);
-      } else {
-        setError('User with this email does not exist');
-      }
-    } catch (error) {
-      console.error('Error checking email:', error.message);
-      setError('An error occurred. Please try again later.');
+    if (await userExists(email)) {
+      setEmailEntered(true);
+    } else {
+      setError('User with this email does not exist');
     }
+
   };
 
   const handleLogin = async (e) => {
@@ -49,24 +41,20 @@ const LoginPage = () => {
       setError('Please enter your password');
       return;
     }
-
-    try {
-      const response = await axios.post('login', { email, password });
-      console.log('Login successful');
+    
+    if (await signin(email, password)) {
       setLoginSuccess(true);
       setError('Login successful');
-
-      login(response.data.token);
-    } catch (error) {
-      console.error('Login failed:', error.message);
-      setError(error.response.data.error || 'Login failed. Please try again.');
+    } else {
+      setError('Wrong password');
     }
+
   };
 
   const handleEditEmail = () => {
     setError('');
     setLoginSuccess(false);
-    setUserExists(false);
+    setEmailEntered(false);
   };
 
   return (
@@ -75,9 +63,9 @@ const LoginPage = () => {
         <img src={visual} alt="School" className="w-1/3 mx-auto" />
         <Logo size={4.5}/>
 
-        <form onSubmit={userExists ? handleLogin : handleEmailSubmit}>
+        <form onSubmit={emailEntered ? handleLogin : handleEmailSubmit} autoComplete="on">
 
-          {userExists ? (
+          {emailEntered ? (
 
             <div>
               <div className="text-left">
@@ -93,6 +81,7 @@ const LoginPage = () => {
                 icon={<MdLock/>}
                 placeholder="Password"
                 type="password"
+                name="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
@@ -104,6 +93,7 @@ const LoginPage = () => {
               icon={<MdEmail/>}
               placeholder="Email address"
               type="email"
+              name="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -112,11 +102,11 @@ const LoginPage = () => {
 
           {error && <p className={`${loginSuccess ? 'text-green-600' : 'text-red-600'} mt-4`}>{error}</p>}
 
-          {!userExists && (
+          {!emailEntered && (
             <button type="submit" className="btn-primary mt-2">Next</button>
           )}
 
-          {userExists && (
+          {emailEntered && (
             <button type="submit" className="btn-primary mt-2">Login</button>
           )}
         </form>
@@ -130,4 +120,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default Login;
