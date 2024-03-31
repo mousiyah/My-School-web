@@ -1,5 +1,5 @@
 import React from 'react';
-import DiaryEntry from './DiaryEntry';
+import DiaryEntry from './DiaryDayEntry';
 
 const DiaryDay: React.FC<{ weekIndex: number; selectedDate: Date }> = ({
   weekIndex,

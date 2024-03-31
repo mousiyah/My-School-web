@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
-import { useAuth } from '../../utils/auth';
-import InputBox from './InputWithIcon';
+import { useAuth } from '../../hooks/useAuth.ts';
+import InputBox from './InputWithIcon.tsx';
 import Logo from '../Logo.tsx';
 import visual from '../../assets/visual_login.png';
 import { FaArrowLeft } from "react-icons/fa";
 import { MdEmail, MdLock } from 'react-icons/md';
 
 const Login = () => {
-  const { signin, userExists } = useAuth();
+  const { login, userExists } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [emailEntered, setEmailEntered] = useState(false);
-  const [loginSuccess, setLoginSuccess] = useState(false);
+  const [signinSuccess, setSigninSuccess] = useState(false);
 
-  const validateForm = () => {
+  const validateEmailForm = () => {
     if (!email.trim()) {
       setError('Please enter your email');
       return false;
@@ -23,9 +23,18 @@ const Login = () => {
     return true;
   };
 
+  const validatePasswordForm = () => {
+    if (!password.trim()) {
+      setError('Please enter your password');
+      return false;
+    }
+    setError('');
+    return true;
+  };
+
   const handleEmailSubmit = async (e) => {
     e.preventDefault();
-    if (!validateForm()) return;
+    if (!validateEmailForm()) return;
 
     if (await userExists(email)) {
       setEmailEntered(true);
@@ -35,25 +44,24 @@ const Login = () => {
 
   };
 
-  const handleLogin = async (e) => {
+  const handlePasswordSubmit = async (e) => {
     e.preventDefault();
-    if (!password.trim()) {
-      setError('Please enter your password');
-      return;
-    }
+    if (!validatePasswordForm()) return;
     
-    if (await signin(email, password)) {
-      setLoginSuccess(true);
+    try {
+      await login(email, password);
+
+      setSigninSuccess(true);
       setError('Login successful');
-    } else {
-      setError('Wrong password');
+    } catch (error) {
+      setError(error.message);
     }
 
   };
 
   const handleEditEmail = () => {
     setError('');
-    setLoginSuccess(false);
+    setSigninSuccess(false);
     setEmailEntered(false);
   };
 
@@ -63,7 +71,7 @@ const Login = () => {
         <img src={visual} alt="School" className="w-1/3 mx-auto" />
         <Logo size={4.5}/>
 
-        <form onSubmit={emailEntered ? handleLogin : handleEmailSubmit} autoComplete="on">
+        <form onSubmit={emailEntered ? handlePasswordSubmit : handleEmailSubmit} method="get" autoComplete="on">
 
           {emailEntered ? (
 
@@ -100,7 +108,7 @@ const Login = () => {
             
           )}
 
-          {error && <p className={`${loginSuccess ? 'text-green-600' : 'text-red-600'} mt-4`}>{error}</p>}
+          {error && <p className={`${signinSuccess ? 'text-green-600' : 'text-red-600'} mt-4`}>{error}</p>}
 
           {!emailEntered && (
             <button type="submit" className="btn-primary mt-2">Next</button>

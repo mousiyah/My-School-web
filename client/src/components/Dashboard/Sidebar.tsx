@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { AiOutlineHome } from "react-icons/ai";
 import { IoBookOutline } from "react-icons/io5";
@@ -11,9 +11,20 @@ import SidebarButton from './SidebarButton';
 
 interface SidebarProps {
   isOpen?: boolean;
+  onSidebarClick: (itemName: string) => void;
+  selectedSection: string;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ isOpen}) => {
+const Sidebar: React.FC<SidebarProps> = ({ isOpen, onSidebarClick, selectedSection}) => {
+
+  const sidebarItems = [
+    { icon: AiOutlineHome, name: 'Home' },
+    { icon: IoBookOutline, name: 'Diary' },
+    { icon: GoTasklist, name: 'Todo' },
+    { icon: PiNotebookLight, name: 'Lessons' },
+    { icon: GoCommentDiscussion, name: 'Announcements' },
+    { icon: CiMail, name: 'Inbox' },
+  ];
 
   return (
     <div
@@ -21,12 +32,16 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen}) => {
                   transition-all duration-100 ease-in-out
                   ${isOpen ? 'w-72' : 'w-24'} h-full`}>
 
-      <SidebarButton icon={AiOutlineHome} name="Home" selected={false} showText={isOpen} />
-      <SidebarButton icon={IoBookOutline} name="Diary" selected={true} showText={isOpen} />
-      <SidebarButton icon={GoTasklist} name="To do" selected={false} showText={isOpen} />
-      <SidebarButton icon={PiNotebookLight} name="Lessons" selected={false} showText={isOpen} />
-      <SidebarButton icon={GoCommentDiscussion} name="Announcements" selected={false} showText={isOpen} />
-      <SidebarButton icon={CiMail} name="Inbox" selected={false} showText={isOpen} />
+      {sidebarItems.map((item, index) => (
+        <SidebarButton
+          key={index}
+          icon={item.icon}
+          name={item.name}
+          selected={selectedSection === item.name.toLowerCase()}
+          showText={isOpen}
+          onClick={() => onSidebarClick(item.name.toLowerCase())}
+        />
+      ))}
 
     </div>
   );

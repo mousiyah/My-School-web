@@ -27,6 +27,8 @@ const InputWithIcon: React.FC<InputWithIconProps> = ({
       <input
         type={type}
         name={name}
+        autoComplete="yes" // idk why works
+        id={name}
         placeholder={placeholder}
         className="border-none outline-none pl-10 w-full"
         value={value}

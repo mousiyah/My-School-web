@@ -5,12 +5,10 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
 
-// Check if a user exists with the provided email
 router.post('/user-exists', async (req, res) => {
   const { email } = req.body;
 
   try {
-    // Check if the user exists
     const user = await User.findOne({ where: { email } });
     res.status(200).json({ exists: !!user });
   } catch (error) {
@@ -35,11 +33,12 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ error: 'Wrong password. Please try again.' });
     }
 
-    // Generate JWT token
-    const token = jwt.sign({ userEmail: user.email }, process.env.JWT_SECRET, { expiresIn: null });
+    // Generate access token
+    const accessToken = jwt.sign({ userEmail: user.email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
+    // Generate refresh token
+    const refreshToken = jwt.sign({ userEmail: user.email }, process.env.REFRESH_TOKEN_SECRET);
 
-    // Respond with token
-    res.status(200).json({ token });
+    res.status(200).json({ accessToken, refreshToken });
   } catch (error) {
     console.error('Login error:', error);
     res.status(500).json({ error: 'Internal server error' });

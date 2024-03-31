@@ -22,7 +22,12 @@ const App: React.FC = () => {
 
       <Route path="/login" element={isAuthenticated ? <Navigate to="/dashboard" /> : <Login /> } />
 
-      <Route path="/dashboard" element={
+      <Route path="/dashboard/*" element={
+        <RequireAuth fallbackPath={'/login'}> 
+            <Dashboard/>
+            </RequireAuth>}/>
+
+      <Route path="/dashboard/:sectionName/*" element={
         <RequireAuth fallbackPath={'/login'}> 
             <Dashboard/>
             </RequireAuth>}/>

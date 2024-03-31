@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Logo from '../Logo';
-import { useAuth } from '../../utils/auth';
+import { useAuth } from '../../hooks/useAuth';
 
 import { MdMenu } from 'react-icons/md';
 import { IoIosArrowDown } from "react-icons/io";
@@ -10,12 +10,32 @@ interface TopbarProps {
 }
 
 const Topbar: React.FC<TopbarProps> = ({ onToggleSidebar }) => {
-  const { signout } = useAuth();
+  const { logout } = useAuth();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
+
+  const closeDropdown = (event: MouseEvent) => {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target as Node) &&
+      buttonRef.current !== event.target
+    ) {
+      setIsDropdownOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', closeDropdown);
+
+    return () => {
+      document.removeEventListener('mousedown', closeDropdown);
+    };
+  }, []);
 
   return (
     <nav className="w-full px-4 py-1/2 border-b border-gray-300 relative">
@@ -35,10 +55,11 @@ const Topbar: React.FC<TopbarProps> = ({ onToggleSidebar }) => {
           <Logo size={2.6} />
         </div>
 
-        {/* Profile */}
+        {/* Profile Dropdown Button */}
         <div className="ml-auto relative">
 
           <button
+            ref={buttonRef}
             id="profileBtn"
             className="btn-primary btn-round flex items-center"
             type="button"
@@ -47,10 +68,8 @@ const Topbar: React.FC<TopbarProps> = ({ onToggleSidebar }) => {
             <IoIosArrowDown />
           </button>
 
-          {/* Profile button Dropdown content */}
           {isDropdownOpen && (
-            <div id="dropdown"
-                className="absolute top-full right-0 z-10 mt-2 p-0 bg-white rounded-lg shadow text-gray-600">
+            <div ref={dropdownRef} className="absolute top-full right-0 z-10 mt-2 p-0 bg-white rounded-lg shadow text-gray-600">
 
               <button className="block px-7 py-2 pt-3 hover:bg-gray-100 rounded-t-lg w-full text-left">
                 Profile
@@ -61,7 +80,7 @@ const Topbar: React.FC<TopbarProps> = ({ onToggleSidebar }) => {
               </button>
 
               <button 
-                onClick={signout}
+                onClick={logout}
                 className="block px-7 py-2 pb-3 hover:bg-gray-100 rounded-b-lg w-full text-left">
                 Sign out
               </button>
