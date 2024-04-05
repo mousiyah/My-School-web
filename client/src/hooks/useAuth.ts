@@ -1,27 +1,29 @@
-import axios from 'axios';
+import { useState } from 'react';
 
 import useSignIn from 'react-auth-kit/hooks/useSignIn';
 import useSignOut from 'react-auth-kit/hooks/useSignOut';
 import createRefresh from 'react-auth-kit/createRefresh';
-import { useNavigate } from './useNavigate';
+
+import { useNavigate } from 'hooks/useNavigate';
+import { userService } from 'services/apiService';
 
 export const useAuth = () => {
-  
+  const [loading, setLoading] = useState(false);
   const signIn = useSignIn();
   const signOut = useSignOut();
-  const {navigateToDashboard, navigateToLogin} = useNavigate();
+  const { navigateToDashboard, navigateToLogin } = useNavigate();
 
-  const logout = () => {
-    signOut();
+  const logout = async (): Promise<void> => {
+    setLoading(true);
+    await signOut();
     navigateToLogin();
+    setLoading(false);
   };
-
 
   const login = async (email: string, password: string): Promise<void> => {
     try {
-      const response = await axios.post('login', { email, password });
-      const { accessToken, refreshToken } = response.data;
-
+      setLoading(true);
+      const { accessToken, refreshToken } = await userService.login(email, password);
       if (signIn({
         auth: {
           token: accessToken,
@@ -33,21 +35,21 @@ export const useAuth = () => {
       })) {
         navigateToDashboard();
       }
-
+      setLoading(false);
     } catch (error) {
-      throw new Error(error.response.data.error);
+      setLoading(false);
+      throw new Error(error.message);
     }
   };
 
   const userExists = async (email: string): Promise<boolean> => {
     try {
-      const response = await axios.post('user-exists', { email });
-      return response.data.exists;
+      const exists = await userService.userExists(email);
+      return exists;
     } catch (error) {
       return false;
     }
   };
 
-
-  return { login, logout, userExists};
+  return { login, logout, userExists, loading };
 };

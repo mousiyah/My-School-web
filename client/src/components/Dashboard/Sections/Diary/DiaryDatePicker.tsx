@@ -1,7 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import DatePicker, { registerLocale } from 'react-datepicker';
+import { useClickOutside } from 'hooks/useClickOutside';
 import 'react-datepicker/dist/react-datepicker.css';
+
 import { enGB } from 'date-fns/locale/en-GB';
+
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 
 registerLocale('en-GB', enGB);
@@ -15,8 +18,9 @@ const DiaryDatePicker: React.FC<DiaryDatePickerProps> = ({
     selectedDate,
     setSelectedDate,
 }) => {
+    
     const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
-    const datePickerRef = useRef<HTMLDivElement>(null);
+    const datePickerRef = useRef();
 
     const handleDateChange = (date: Date) => {
         setSelectedDate(date);
@@ -34,6 +38,16 @@ const DiaryDatePicker: React.FC<DiaryDatePickerProps> = ({
         setSelectedDate(nextWeek);
     };
 
+    const toggleDatePicker = () => {
+        setIsDatePickerOpen(!isDatePickerOpen);
+    }
+
+    const closeDatePicker = () => {
+        setIsDatePickerOpen(false);
+    }
+
+    useClickOutside(datePickerRef, closeDatePicker);
+
     const getWeekRange = (date: Date) => {
         const startDate = new Date(date);
         startDate.setDate(date.getDate() - date.getDay() + (date.getDay() === 0 ? -6 : 1));
@@ -50,36 +64,20 @@ const DiaryDatePicker: React.FC<DiaryDatePickerProps> = ({
         return `${startMonth} ${startDay} - ${endMonth} ${endDay}, ${year}`;
     };
 
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (
-                datePickerRef.current &&
-                !datePickerRef.current.contains(event.target as Node)
-            ) {
-                setIsDatePickerOpen(false);
-            }
-        };
-
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
-
     return (
-        <div className="flex w-full justify-between items-center mb-4 px-4">
+        <div className="flex w-full justify-between items-center mb-4 px-2">
             <div className="flex items-center mx-auto">
                 <button onClick={handlePrevWeek}>
                     <IoIosArrowBack />
                 </button>
-                <div ref={datePickerRef}>
+                <div>
                     <button
-                        onClick={() => setIsDatePickerOpen(!isDatePickerOpen)}
+                        onClick={toggleDatePicker}
                         className="relative mx-2 btn-white w-96"
                     >
                         <div>{getWeekRange(selectedDate)}</div>
                         {isDatePickerOpen && (
-                            <div className="absolute top-full inset-0 z-50 mt-2">
+                            <div className="absolute top-full inset-0 z-50 mt-2" ref={datePickerRef}>
                                 <DatePicker
                                     selected={selectedDate}
                                     onChange={handleDateChange}

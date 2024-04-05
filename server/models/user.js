@@ -1,23 +1,41 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/db');
+'use strict';
+const { Model } = require('sequelize');
 
-const User = sequelize.define('User', {
+module.exports = (sequelize, DataTypes) => {
+  class user extends Model {
+    static associate(models) {
+      user.belongsTo(models.role, {
+        foreignKey: {
+          name: 'roleId',
+          allowNull: false,
+          onDelete: 'CASCADE',
+          onUpdate: 'CASCADE'
+        },
+      });
+    }
+  }
+  user.init({
     email: {
-      allowNull: false,
       type: DataTypes.STRING,
+      allowNull: false,
       unique: true
     },
     password: {
+      type: DataTypes.STRING,
       allowNull: false,
-      type: DataTypes.STRING
     },
-    role: {
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    surname: {
+      type: DataTypes.STRING,
       allowNull: false,
-      type: DataTypes.STRING
     },
   }, {
     sequelize,
-    modelName: 'User',
+    timestamps: true,
+    modelName: 'user',
   });
-
-module.exports = User; 
+  return user;
+};

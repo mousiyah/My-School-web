@@ -1,4 +1,3 @@
-/* Bootstrap Theme */
 $theme-colors: (
   "primary": #6666bc,
 );
@@ -15,6 +14,8 @@ $theme-colors: (
 
 .body{
   font-family: 'Google Sans';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .logo {
@@ -23,6 +24,3 @@ $theme-colors: (
   font-weight: normal;
   color: map-get($theme-colors, "primary");
 }
-
-/* Imports */
-@import "node_modules/bootstrap/scss/bootstrap";

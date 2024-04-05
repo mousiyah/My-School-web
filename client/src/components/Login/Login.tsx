@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
-import { useAuth } from '../../hooks/useAuth.ts';
+import { useAuth } from 'hooks/useAuth.ts';
+
 import InputBox from './InputWithIcon.tsx';
-import Logo from '../Logo.tsx';
-import visual from '../../assets/visual_login.png';
+import Logo from 'components/Logo.tsx';
+
+import visual from 'assets/visual_login.png';
+
 import { FaArrowLeft } from "react-icons/fa";
 import { MdEmail, MdLock } from 'react-icons/md';
 
-const Login = () => {
+const Login: React.FC = () => {
   const { login, userExists } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -78,7 +81,7 @@ const Login = () => {
             <div>
               <div className="text-left">
                 <button type="button" onClick={handleEditEmail}>
-                  <div className="flex ml-2 items-center text-second">
+                  <div className="flex ml-2 items-center text-accent">
                     <FaArrowLeft />
                     <p className="mb-0 ml-4 text-base text-gray-600">{email}</p>
                   </div>
@@ -111,11 +114,11 @@ const Login = () => {
           {error && <p className={`${signinSuccess ? 'text-green-600' : 'text-red-600'} mt-4`}>{error}</p>}
 
           {!emailEntered && (
-            <button type="submit" className="btn-primary mt-2">Next</button>
+            <button type="submit" className="btn btn-primary btn-wide mt-2">Next</button>
           )}
 
           {emailEntered && (
-            <button type="submit" className="btn-primary mt-2">Login</button>
+            <button type="submit" className="btn btn-primary btn-wide mt-2">Login</button>
           )}
         </form>
 
