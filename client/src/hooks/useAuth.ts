@@ -5,7 +5,7 @@ import useSignOut from 'react-auth-kit/hooks/useSignOut';
 import createRefresh from 'react-auth-kit/createRefresh';
 
 import { useNavigate } from 'hooks/useNavigate';
-import { userService } from 'services/apiService';
+import { authService } from 'services/authService';
 
 export const useAuth = () => {
   const [loading, setLoading] = useState(false);
@@ -23,7 +23,7 @@ export const useAuth = () => {
   const login = async (email: string, password: string): Promise<void> => {
     try {
       setLoading(true);
-      const {accessToken, refreshToken } = await userService.login(email, password);
+      const {accessToken, refreshToken } = await authService.login(email, password);
       if (signIn({
         auth: {
           token: accessToken,
@@ -44,23 +44,12 @@ export const useAuth = () => {
 
   const userExists = async (email: string): Promise<boolean> => {
     try {
-      const exists = await userService.userExists(email);
+      const exists = await authService.userExists(email);
       return exists;
     } catch (error) {
       return false;
     }
   };
 
-  const getAccessToken = (): string | null => {
-    const cookies = document.cookie.split(';').map(cookie => cookie.trim());
-    for (const cookie of cookies) {
-      const [name, value] = cookie.split('=');
-      if (name.trim() === '_auth') {
-        return value;
-      }
-    }
-    return null;
-  };
-
-  return { login, logout, userExists, loading, getAccessToken };
+  return { login, logout, userExists, loading };
 };

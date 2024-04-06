@@ -3,12 +3,6 @@ const jwt = require('jsonwebtoken');
 
 const db = require('../models');
 
-module.exports = {
-  userWithEmailExists,
-  loginUser,
-};
-
-
 async function getUserByEmail(email) {
   try {
     const user = await db.user.findOne({ where: { email: email } });
@@ -19,7 +13,7 @@ async function getUserByEmail(email) {
 }
 
 async function userWithEmailExists(email) {
-    const user = await getUser(email);
+    const user = await getUserByEmail(email);
     return !!user;
 }
 
@@ -69,3 +63,18 @@ function generateRefreshToken(userId) {
     throw new Error('Internal server error');
   }
 }
+
+const verifyAccessToken = (token) => {
+  return new Promise((resolve, reject) => {
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
+      if (err) return reject(err);
+      resolve(decoded.userId);
+    });
+  });
+};
+
+module.exports = {
+  userWithEmailExists,
+  loginUser,
+  verifyAccessToken,
+};

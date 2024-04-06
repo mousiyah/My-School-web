@@ -2,10 +2,10 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const path = require('path');
-const errorHandler = require('./utils/error-handler');
+const errorHandler = require('./utils/errorHandler');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
-const corsOptions = require('./config/cors-options');
+const corsOptions = require('./config/corsOptions');
 const fs = require('fs');
 const sequelize = require('./config/db');
 

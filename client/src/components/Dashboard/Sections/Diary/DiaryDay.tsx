@@ -2,36 +2,32 @@ import React from 'react';
 import DiaryEntry from './DiaryDayEntry';
 
 interface DiaryDayProps {
-  weekIndex: number; 
-  selectedDate: Date;
+  date: Date;
 }
 
 const DiaryDay: React.FC<DiaryDayProps> = ({
-  weekIndex,
-  selectedDate,
+  date,
 }) => {
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
-  // Calculate the date for the day of the week
-  const currentDate = new Date(selectedDate);
-  currentDate.setDate(selectedDate.getDate() - selectedDate.getDay() + 1 + weekIndex);
+  const weekIndex = (date.getDay() + 6) % 7;
 
-  const formattedDate = currentDate.toLocaleDateString('en-GB', {
+  const formattedDate = date.toLocaleDateString('en-GB', {
     day: 'numeric',
     month: 'short',
   });
 
-  const isCurrentDate = (): boolean => {
+  const isToday = (): boolean => {
     const today = new Date();
-    return currentDate.toDateString() === today.toDateString();
+    return date.toDateString() === today.toDateString();
   };
 
   return (
     <div className="w-full h-full border-box flex-grow rounded-md text-sm">
 
-      <div className={`flex justify-between text-white  py-3 px-3 ${isCurrentDate() ? 'bg-primary-dark' : 'bg-primary'}`}>
+      <div className={`flex justify-between text-white  py-3 px-3 ${isToday() ? 'bg-primary-dark' : 'bg-primary'}`}>
         <span>{days[weekIndex]}</span>
-        {isCurrentDate() ? (
+        {isToday() ? (
           <span>Today</span>) : 
           (<span>{formattedDate}</span>)}
       </div>
