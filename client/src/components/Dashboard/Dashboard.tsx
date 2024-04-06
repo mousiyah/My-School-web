@@ -29,17 +29,18 @@ const Dashboard: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen w-screen">
+    <div className="flex flex-col w-full h-screen border-box">
       
       <Topbar onToggleSidebar={toggleSidebar} />
-      <div className="flex overflow-y-auto flex-1">
+      
+      <div className="flex w-full h-full border-box overflow-y-auto">
+
         <Sidebar
           isOpen={isSidebarOpen}
           onSidebarClick={onSidebarClick}
-          selectedSection={sectionName || 'home'}
-        />
+          selectedSection={sectionName || 'home'}/>
 
-        <div className="w-full h-full overflow-y-auto">
+        <div className="w-full border-box h-full overflow-y-auto overflow-x-hidden">
           {sectionComponents[sectionName]}
         </div>
 

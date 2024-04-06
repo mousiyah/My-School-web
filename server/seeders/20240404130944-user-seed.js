@@ -15,7 +15,7 @@ module.exports = {
 
     for (let i = 0; i < 40; i++) {
       const email = `student${i + 1}@example.com`;
-      const password = await bcrypt.hash('password', 10);
+      const password = await bcrypt.hash('12345', 10);
       
       studentsData.push({
         email: email,
@@ -30,7 +30,7 @@ module.exports = {
     
     for (let i = 0; i < 10; i++) {
       const email = `teacher${i + 1}@example.com`;
-      const password = await bcrypt.hash('password', 10);
+      const password = await bcrypt.hash('12345', 10);
 
       teachersData.push({
         email: email,

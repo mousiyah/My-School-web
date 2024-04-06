@@ -27,7 +27,7 @@ const DiaryDay: React.FC<DiaryDayProps> = ({
   };
 
   return (
-    <div className="w-full flex-grow rounded-md text-sm">
+    <div className="w-full h-full border-box flex-grow rounded-md text-sm">
 
       <div className={`flex justify-between text-white  py-3 px-3 ${isCurrentDate() ? 'bg-primary-dark' : 'bg-primary'}`}>
         <span>{days[weekIndex]}</span>

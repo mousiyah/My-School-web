@@ -1,9 +1,15 @@
 const userService = require('../services/user-service');
 
-async function userExists(req, res) {
+module.exports = {
+  userWithEmailExists,
+  loginUser,
+};
+
+
+async function userWithEmailExists(req, res) {
   const { email } = req.query;
   try {
-    const exists = await userService.userExists(email);
+    const exists = await userService.userWithEmailExists(email);
     res.status(200).json({ exists });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -20,8 +26,3 @@ async function loginUser(req, res) {
     res.status(401).json({ error: error.message });
   }
 }
-
-module.exports = {
-  userExists,
-  loginUser,
-};

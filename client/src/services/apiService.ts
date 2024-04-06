@@ -1,4 +1,7 @@
 import axios from 'axios';
+import { useAuth } from 'hooks/useAuth';
+
+//const getAccessToken = useAuth();
 
 export const userService = {
   login: async (email: string, password: string) => {

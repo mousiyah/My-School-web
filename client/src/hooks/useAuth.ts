@@ -23,14 +23,14 @@ export const useAuth = () => {
   const login = async (email: string, password: string): Promise<void> => {
     try {
       setLoading(true);
-      const { accessToken, refreshToken } = await userService.login(email, password);
+      const {accessToken, refreshToken } = await userService.login(email, password);
       if (signIn({
         auth: {
           token: accessToken,
           type: 'Bearer'
         },
         userState: {
-          email: email,
+          loggedIn: "true",
         }
       })) {
         navigateToDashboard();
@@ -51,5 +51,16 @@ export const useAuth = () => {
     }
   };
 
-  return { login, logout, userExists, loading };
+  const getAccessToken = (): string | null => {
+    const cookies = document.cookie.split(';').map(cookie => cookie.trim());
+    for (const cookie of cookies) {
+      const [name, value] = cookie.split('=');
+      if (name.trim() === '_auth') {
+        return value;
+      }
+    }
+    return null;
+  };
+
+  return { login, logout, userExists, loading, getAccessToken };
 };

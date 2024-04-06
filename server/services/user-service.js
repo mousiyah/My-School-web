@@ -4,11 +4,12 @@ const jwt = require('jsonwebtoken');
 const db = require('../models');
 
 module.exports = {
-  userExists,
+  userWithEmailExists,
   loginUser,
 };
 
-async function getUser(email) {
+
+async function getUserByEmail(email) {
   try {
     const user = await db.user.findOne({ where: { email: email } });
     return user;
@@ -17,14 +18,15 @@ async function getUser(email) {
   }
 }
 
-async function userExists(email) {
+async function userWithEmailExists(email) {
     const user = await getUser(email);
     return !!user;
 }
 
 async function loginUser(email, password) {
 
-  const user = await getUser(email);
+  const user = await getUserByEmail(email);
+  const userId = user.id;
 
   if (!user) {
     throw new Error('User with this email does not exist');
@@ -35,8 +37,8 @@ async function loginUser(email, password) {
     throw new Error('Wrong password. Please try again.');
   }
 
-  const accessToken = generateAccessToken(email);
-  const refreshToken = generateRefreshToken(email);
+  const accessToken = generateAccessToken(userId);
+  const refreshToken = generateRefreshToken(userId);
 
   return { accessToken, refreshToken };
 }
@@ -50,18 +52,18 @@ async function validatePassword(password, userPassword) {
   }
 }
 
-function generateAccessToken(email) {
+function generateAccessToken(userId) {
   try {
-    return jwt.sign({ userEmail: email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
+    return jwt.sign({ userId: userId }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
   } catch (error) {
     console.error('Error generating access token:', error);
     throw new Error('Internal server error');
   }
 }
 
-function generateRefreshToken(email) {
+function generateRefreshToken(userId) {
   try {
-    return jwt.sign({ userEmail: email }, process.env.REFRESH_TOKEN_SECRET);
+    return jwt.sign({ userId: userId }, process.env.REFRESH_TOKEN_SECRET);
   } catch (error) {
     console.error('Error generating refresh token:', error);
     throw new Error('Internal server error');

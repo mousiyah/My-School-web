@@ -28,9 +28,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onSidebarClick, selectedSecti
 
   return (
     <div
-      className={`overflow-y-auto bg-white py-2 pr-2 border-r border-gray-300
+      className={`overflow-y-auto h-full border-box bg-white py-2 pr-2 border-r border-gray-300
                   transition-all duration-100 ease-in-out
-                  ${isOpen ? 'w-72' : 'w-24'} h-full`}>
+                  ${isOpen ? 'w-72' : 'w-24'}`}>
 
       {sidebarItems.map((item, index) => (
         <SidebarButton

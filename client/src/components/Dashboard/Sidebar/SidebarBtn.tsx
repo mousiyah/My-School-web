@@ -18,7 +18,7 @@ const SidebarButton: React.FC<SidebarButtonProps> = ({
 
   return (
     <button onClick={onClick}
-      className={`w-full flex items-center py-3 px-4 rounded-r 
+      className={`w-full flex items-center py-3 px-6 rounded-r 
                   ${selected ? 'bg-primary' : 'hover:bg-gray-100'}`}>
                     
       <Icon size={20} className={`${selected ? 'text-white' : 'text-gray-500'}`} />

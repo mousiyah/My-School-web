@@ -19,7 +19,7 @@ const Topbar: React.FC<TopbarProps> = ({ onToggleSidebar }) => {
   ];
 
   return (
-    <nav className="w-full px-4 py-1/2 border-b border-gray-300 relative">
+    <nav className="w-full border-box px-4 py-1/2 border-b border-gray-300 relative">
       <div className="flex items-center">
 
         {/* Hamburger */}
