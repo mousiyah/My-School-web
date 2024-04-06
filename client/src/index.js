@@ -7,9 +7,6 @@ import { BrowserRouter } from "react-router-dom";
 import createStore from 'react-auth-kit/createStore';
 import AuthProvider from 'react-auth-kit';
 
-import store from './store';
-import { Provider } from 'react-redux';
-
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 const store = createStore({
