@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import DatePicker, { registerLocale } from 'react-datepicker';
 import { useClickOutside } from 'hooks/useClickOutside';
 import 'react-datepicker/dist/react-datepicker.css';
