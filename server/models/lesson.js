@@ -46,6 +46,8 @@ module.exports = (sequelize, DataTypes) => {
       
       lesson.hasMany(models.mark);
 
+      lesson.hasMany(models.attendance);
+
     }
   }
   lesson.init({

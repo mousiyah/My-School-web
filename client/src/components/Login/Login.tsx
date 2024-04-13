@@ -111,7 +111,7 @@ const Login: React.FC = () => {
             
           )}
 
-          {error && <p className={`${signinSuccess ? 'text-green-600' : 'text-red-600'} mt-4`}>{error}</p>}
+          {error && <div className={`${signinSuccess ? 'text-green-600' : 'text-red-600'} mt-4`}>{error}</div>}
 
           {!emailEntered && (
             <button type="submit" className="btn btn-primary btn-wide mt-2">Next</button>

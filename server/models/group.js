@@ -24,7 +24,9 @@ module.exports = (sequelize, DataTypes) => {
             onUpdate: 'CASCADE',
             onDelete: 'CASCADE',
           }
-        });
+      });
+
+      group.belongsToMany(models.subject, { through: 'groupSubjects' });
 
     }
   }

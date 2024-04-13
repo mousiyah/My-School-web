@@ -1,7 +1,8 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useClickOutside } from 'hooks/useClickOutside';
-
 import { IoIosArrowDown } from "react-icons/io";
+
+import { authApi } from 'api/authApi';
 
 interface DropdownItem {
   label: string;
@@ -13,8 +14,18 @@ interface ProfileBtnProps {
 }
 
 const ProfileBtn: React.FC<ProfileBtnProps> = ({ dropdownItems }) => {
+  const [userEmail, setUserEmail] = useState<string>('');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const ref = useRef();
+
+  useEffect(() => {
+    fetchUserEmail();
+  }, []);
+
+  const fetchUserEmail = async () => {
+    const userEmail = await authApi.getUserEmail();
+    setUserEmail(userEmail);
+  };
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -28,15 +39,13 @@ const ProfileBtn: React.FC<ProfileBtnProps> = ({ dropdownItems }) => {
 
   return (
     <div ref={ref} className="ml-auto relative">
-      <button
-        className="btn btn-primary btn-round"
-        type="button"
-        onClick={toggleDropdown}>
-          <div className="flex items-center">
-            <span className="mr-2">M</span>
-            <IoIosArrowDown />
-          </div>
-      </button>
+      <button className="btn btn-primary rounded-lg text-white" type="button" onClick={toggleDropdown}>
+  <div className="flex items-center">
+    <span className="mr-2 hidden lg:inline">{userEmail}</span>
+    <span className="mr-2 lg:hidden">{userEmail.charAt(0)}</span>
+    <IoIosArrowDown />
+  </div>
+</button>
 
       {isDropdownOpen && (
         <div className="absolute top-full right-0 z-10 mt-2 p-0 bg-white rounded-lg shadow text-gray-600">

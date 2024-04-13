@@ -1,5 +1,11 @@
 const authService = require('../services/authService');
-const diaryService = require('../services/diaryService');
+
+module.exports = {
+  userWithEmailExists,
+  loginUser,
+  getUserEmail,
+};
+
 
 async function userWithEmailExists(req, res) {
   const { email } = req.query;
@@ -21,19 +27,12 @@ async function loginUser(req, res) {
   }
 }
 
-async function getDiaryDay(req, res) {
+async function getUserEmail(req, res) {
   try {
     const userId = req.userId;
-    const date = req.date;
-    const diaryDay = await diaryService.getDiaryDay(userId, date);
-    res.status(200).json(diaryEntries);
+    const email = await authService.getUserEmail(userId);
+    res.status(200).json({ email });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 }
-
-module.exports = {
-  userWithEmailExists,
-  loginUser,
-  getDiaryDay,
-};

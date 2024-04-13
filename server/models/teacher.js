@@ -35,6 +35,15 @@ module.exports = (sequelize, DataTypes) => {
         }
       });
 
+      teacher.hasOne(models.groupSubject, {
+        foreignKey: {
+          name: 'teacherId',
+          allowNull: true,
+          onUpdate: 'CASCADE',
+          onDelete: 'CASCADE',
+        }
+      });
+
     }
   }
   teacher.init({

@@ -3,6 +3,7 @@ import { useAuth } from 'hooks/useAuth';
 import ProfileBtn from './ProfileBtn';
 import Logo from 'components/Logo';
 import { MdMenu } from 'react-icons/md';
+import { IoClose } from "react-icons/io5";
 
 interface TopbarProps {
   onToggleSidebar: () => void;

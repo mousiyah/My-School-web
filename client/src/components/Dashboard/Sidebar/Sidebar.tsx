@@ -18,19 +18,20 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onSidebarClick, selectedSection}) => {
 
   const sidebarItems = [
-    { icon: AiOutlineHome, name: 'Home' },
     { icon: IoBookOutline, name: 'Diary' },
     { icon: GoTasklist, name: 'Homeworks' },
-    { icon: PiNotebook, name: 'Lessons' },
+    { icon: PiNotebook, name: 'Subjects' },
     { icon: GoCommentDiscussion, name: 'Announcements' },
     { icon: CiMail, name: 'Inbox' },
   ];
 
   return (
     <div
-      className={`overflow-y-auto h-full border-box bg-white py-2 pr-2 border-r border-gray-300
+      className={`overflow-y-auto h-full border-box 
+                  bg-white py-2 pr-2 border-r border-gray-300
                   transition-all duration-100 ease-in-out
-                  ${isOpen ? 'w-72' : 'w-24'}`}>
+                  ${isOpen ? 'w-64 lg:w-64 sm:w-64 shrink-0 fixed left-0 z-50 lg:relative lg:static lg:z-auto'
+                  : 'w-24'}`}>
 
       {sidebarItems.map((item, index) => (
         <SidebarButton

@@ -21,8 +21,8 @@ module.exports = {
         email: email,
         password: password,
         roleId: studentRoleId,
-        name: `Student${i + 1}`,
-        surname: 'Surname',
+        name: faker.name.firstName(),
+        surname: faker.name.lastName(),
         createdAt: new Date(),
         updatedAt: new Date()
       });
@@ -36,8 +36,8 @@ module.exports = {
         email: email,
         password: password,
         roleId: teacherRoleId,
-        name: `Teacher${i + 1}`,
-        surname: 'Surname',
+        name: faker.name.firstName(),
+        surname: faker.name.lastName(),
         createdAt: new Date(),
         updatedAt: new Date()
       });

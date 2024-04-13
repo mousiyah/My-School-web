@@ -1,5 +1,3 @@
-'use strict';
-
 const { lesson, mark, homework, classwork } = require('../models');
 const faker = require('faker');
 
@@ -11,51 +9,63 @@ const getRandomElement = (array) => {
   return array[Math.floor(Math.random() * array.length)];
 };
 
-/** @type {import('sequelize-cli').Seeder} */
 module.exports = {
   async up(queryInterface, Sequelize) {
     const lessons = await lesson.findAll();
     const marksData = [];
 
     for (const lesson of lessons) {
-      // Get homework and classwork associated with the lesson
-      const associatedHomework = await lesson.getHomework();
-      const associatedClasswork = await lesson.getClasswork();
 
-      // Determine relatedType and relatedId based on availability
-      let relatedType = null;
-      let relatedId = null;
-
-      if (associatedHomework && associatedClasswork) {
-        // If both homework and classwork are available, choose randomly
-        const randomElement = getRandomElement(['homework', 'classwork']);
-        relatedType = randomElement;
-        relatedId = randomElement === 'homework' ? associatedHomework.id : associatedClasswork.id;
-      } else if (associatedHomework) {
-        relatedType = 'homework';
-        relatedId = associatedHomework.id;
-      } else if (associatedClasswork) {
-        relatedType = 'classwork';
-        relatedId = associatedClasswork.id;
-      }
-
-      // Get group associated with the lesson
-      const group = await lesson.getGroup();
-
-      // Get students enrolled in the group
-      const students = await group.getStudents();
-
+        const group = await lesson.getGroup();
+        const students = await group.getStudents();
+      
       for (const student of students) {
-        if (Math.random() < 0.6) {
+        if (Math.random() < 0.5) {
           marksData.push({
             studentId: student.id,
             lessonId: lesson.id,
             value: getRandomMark(),
-            relatedType: relatedType,
-            relatedId: relatedId,
+            relatedType: null,
+            relatedId: null,
             createdAt: new Date(),
             updatedAt: new Date()
           });
+        }
+      }
+
+      if (Math.random() < 0.5) {
+        const associatedHomework = await lesson.getHomework();
+        const associatedClasswork = await lesson.getClasswork();
+
+        if (associatedHomework || associatedClasswork) {
+          let relatedType = null;
+          let relatedId = null;
+
+          if (associatedHomework && associatedClasswork) {
+            const randomElement = getRandomElement(['homework', 'classwork']);
+            relatedType = randomElement;
+            relatedId = randomElement === 'homework' ? associatedHomework.id : associatedClasswork.id;
+          } else if (associatedHomework) {
+            relatedType = 'homework';
+            relatedId = associatedHomework.id;
+          } else if (associatedClasswork) {
+            relatedType = 'classwork';
+            relatedId = associatedClasswork.id;
+          }
+
+          for (const student of students) {
+            if (Math.random() < 0.5) {
+              marksData.push({
+                studentId: student.id,
+                lessonId: lesson.id,
+                value: getRandomMark(),
+                relatedType: relatedType,
+                relatedId: relatedId,
+                createdAt: new Date(),
+                updatedAt: new Date()
+              });
+            }
+          }
         }
       }
     }

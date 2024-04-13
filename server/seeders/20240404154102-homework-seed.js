@@ -16,7 +16,7 @@ module.exports = {
     for (const lesson of lessons) {
 
       if (Math.random() < 0.5) {
-        const randomHomeworkName = faker.lorem.words(2);
+        const randomHomeworkName = faker.lorem.words(3);
 
         const homeworkEntry = {
           name: randomHomeworkName,

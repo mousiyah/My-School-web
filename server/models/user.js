@@ -32,6 +32,12 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    fullname: {
+      type: DataTypes.VIRTUAL,
+      get() {
+        return `${this.name} ${this.surname}`;
+      }
+    },
   }, {
     sequelize,
     timestamps: true,

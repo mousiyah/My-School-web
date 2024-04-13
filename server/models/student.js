@@ -23,7 +23,10 @@ module.exports = (sequelize, DataTypes) => {
       });
 
       student.belongsToMany(models.homework, { through: 'studentHomeworks' });
+
       student.hasMany(models.mark);
+
+      student.hasMany(models.attendance);
 
     }
   }

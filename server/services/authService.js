@@ -3,14 +3,12 @@ const jwt = require('jsonwebtoken');
 
 const db = require('../models');
 
-async function getUserByEmail(email) {
-  try {
-    const user = await db.user.findOne({ where: { email: email } });
-    return user;
-  } catch (error) {
-    throw new Error('Internal server error');
-  }
-}
+module.exports = {
+  userWithEmailExists,
+  loginUser,
+  verifyAccessToken,
+  getUserEmail,
+};
 
 async function userWithEmailExists(email) {
     const user = await getUserByEmail(email);
@@ -37,6 +35,38 @@ async function loginUser(email, password) {
   return { accessToken, refreshToken };
 }
 
+function verifyAccessToken (token) {
+  return new Promise((resolve, reject) => {
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
+      if (err) return reject(err);
+      resolve(decoded.userId);
+    });
+  });
+};
+
+async function getUserEmail(userId) {
+  const user = await getUserById(userId);
+  return user.email;
+}
+
+async function getUserByEmail(email) {
+  try {
+    const user = await db.user.findOne({ where: { email: email } });
+    return user;
+  } catch (error) {
+    throw new Error('Internal server error');
+  }
+}
+
+async function getUserById(userId) {
+  try {
+    const user = await db.user.findOne({ where: { id: userId } });
+    return user;
+  } catch (error) {
+    throw new Error('Internal server error');
+  }
+}
+
 async function validatePassword(password, userPassword) {
   try {
     return await bcrypt.compare(password, userPassword);
@@ -48,7 +78,7 @@ async function validatePassword(password, userPassword) {
 
 function generateAccessToken(userId) {
   try {
-    return jwt.sign({ userId: userId }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
+    return jwt.sign({ userId: userId }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '24h' });
   } catch (error) {
     console.error('Error generating access token:', error);
     throw new Error('Internal server error');
@@ -63,18 +93,3 @@ function generateRefreshToken(userId) {
     throw new Error('Internal server error');
   }
 }
-
-const verifyAccessToken = (token) => {
-  return new Promise((resolve, reject) => {
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
-      if (err) return reject(err);
-      resolve(decoded.userId);
-    });
-  });
-};
-
-module.exports = {
-  userWithEmailExists,
-  loginUser,
-  verifyAccessToken,
-};

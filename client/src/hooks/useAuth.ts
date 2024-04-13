@@ -5,7 +5,7 @@ import useSignOut from 'react-auth-kit/hooks/useSignOut';
 import createRefresh from 'react-auth-kit/createRefresh';
 
 import { useNavigate } from 'hooks/useNavigate';
-import { authService } from 'services/authService';
+import { authApi } from 'api/authApi';
 
 export const useAuth = () => {
   const [loading, setLoading] = useState(false);
@@ -23,7 +23,7 @@ export const useAuth = () => {
   const login = async (email: string, password: string): Promise<void> => {
     try {
       setLoading(true);
-      const {accessToken, refreshToken } = await authService.login(email, password);
+      const {accessToken, refreshToken } = await authApi.login(email, password);
       if (signIn({
         auth: {
           token: accessToken,
@@ -44,7 +44,7 @@ export const useAuth = () => {
 
   const userExists = async (email: string): Promise<boolean> => {
     try {
-      const exists = await authService.userExists(email);
+      const exists = await authApi.userExists(email);
       return exists;
     } catch (error) {
       return false;

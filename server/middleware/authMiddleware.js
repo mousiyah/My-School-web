@@ -11,7 +11,7 @@ const authenticateToken = (req, res, next) => {
       next();
     })
     .catch(error => {
-      console.error('Error verifying access token:', error);
+      console.log('Error verifying access token:', error);
       res.status(403).json({ error: error.message });
     });
 };

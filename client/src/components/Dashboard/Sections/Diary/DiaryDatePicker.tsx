@@ -38,6 +38,18 @@ const DiaryDatePicker: React.FC<DiaryDatePickerProps> = ({
         setSelectedDate(nextWeek);
     };
 
+    const handlePrevDay = () => {
+        const prevDay = new Date(selectedDate);
+        prevDay.setDate(selectedDate.getDate() - 1);
+        setSelectedDate(prevDay);
+    };
+
+    const handleNextDay = () => {
+        const nextDay = new Date(selectedDate);
+        nextDay.setDate(selectedDate.getDate() + 1);
+        setSelectedDate(nextDay);
+    };
+
     const toggleDatePicker = () => {
         setIsDatePickerOpen(!isDatePickerOpen);
     }
@@ -67,15 +79,26 @@ const DiaryDatePicker: React.FC<DiaryDatePickerProps> = ({
     return (
         <div className="flex w-full justify-between items-center mb-4 px-2">
             <div className="flex items-center mx-auto">
-                <button onClick={handlePrevWeek}>
+
+
+                {/* Small and medium screens */}
+                <button className="lg:hidden" onClick={handlePrevDay}>
                     <IoIosArrowBack />
                 </button>
+
+                {/* Large screens */}
+                <button className="hidden lg:block" onClick={handlePrevWeek}>
+                    <IoIosArrowBack />
+                </button>
+
                 <div>
                     <button
                         onClick={toggleDatePicker}
-                        className="relative mx-2 btn-white w-96"
-                    >
-                        <div>{getWeekRange(selectedDate)}</div>
+                        className="relative w-fit lg:w-96 mx-2 btn-white w-96">
+
+                        <div className="lg:hidden">{selectedDate.toLocaleDateString()}</div>
+                        <div className="hidden lg:block">{getWeekRange(selectedDate)}</div>
+                        
                         {isDatePickerOpen && (
                             <div className="absolute top-full inset-0 z-50 mt-2" ref={datePickerRef}>
                                 <DatePicker
@@ -91,9 +114,18 @@ const DiaryDatePicker: React.FC<DiaryDatePickerProps> = ({
                         )}
                     </button>
                 </div>
-                <button onClick={handleNextWeek}>
+
+                {/* Small and medium screens */}
+                <button className="lg:hidden" onClick={handleNextDay}>
                     <IoIosArrowForward />
                 </button>
+
+                {/* Large screens */}
+                <button className="hidden lg:block" onClick={handleNextWeek}>
+                    <IoIosArrowForward />
+                </button>
+
+                
             </div>
             <button className="btn-white" onClick={() => handleDateChange(new Date())}>
                 Today

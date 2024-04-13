@@ -8,6 +8,8 @@ module.exports = (sequelize, DataTypes) => {
 
       subject.belongsToMany(models.teacher, { through: 'teacherSubjects' });
 
+      subject.belongsToMany(models.group, { through: 'groupSubjects' });
+
     }
   }
   subject.init({

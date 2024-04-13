@@ -4,7 +4,7 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     const subjectsData = [
-      { name: 'Mathematics' },
+      { name: 'Math' },
       { name: 'English' },
       { name: 'Science' },
       { name: 'History' },
@@ -14,12 +14,22 @@ module.exports = {
       { name: 'French' },
       { name: 'IT' },
       { name: 'Chemistry' },
-      { name: 'Algebra' },
-      { name: 'Geometry' },
       { name: 'Music' },
       { name: 'Sports' },
       { name: 'Religion' },
       { name: 'Biology' },
+      { name: 'Literature' },
+      { name: 'Economics' },
+      { name: 'Psychology' },
+      { name: 'Sociology' },
+      { name: 'Philosophy' },
+      { name: 'History' },
+      { name: 'Statistics' },
+      { name: 'Engineering' },
+      { name: 'Medicine' },
+      { name: 'Law' },
+      { name: 'Business' },
+      { name: 'Architecture' },
     ];
 
     await queryInterface.bulkInsert('subjects', subjectsData, {});
