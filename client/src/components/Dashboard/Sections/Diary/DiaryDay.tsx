@@ -19,8 +19,8 @@ const DiaryDay: React.FC<DiaryDayProps> = ({ date, diaryDayData }) => {
         <span>{date.toLocaleDateString('en-GB', { weekday: 'long' })}</span>
 
         {isToday() ? (
-          <span>Today</span>) : 
-        <span>{date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</span>
+          <p className="ml-1">Today</p>) : 
+        <p className="ml-1">{date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</p>
         }
         
       </div>
