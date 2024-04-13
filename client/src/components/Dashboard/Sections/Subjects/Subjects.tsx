@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { WidthProvider, Responsive } from 'react-grid-layout';
+import 'react-grid-layout/css/styles.css';
+import 'react-resizable/css/styles.css';
 import { studentApi } from 'api/studentApi';
+
+const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
 const Subjects: React.FC = () => {
   const [subjectsList, setSubjectsList] = useState<{ id: number; name: string; teacher: string }[]>([]);
@@ -21,9 +26,27 @@ const Subjects: React.FC = () => {
     return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
   };
 
+  // Calculate the initial layout for each subject item
+  const generateLayout = () => {
+    return subjectsList.map((subject, index) => ({
+      i: String(index),
+      x: (index % 3), // Distribute items in 3 columns
+      y: Math.floor(index / 3), // Place items in rows
+      w: 1, // Each item occupies 3 columns
+      h: 1.5, // Each item is 2 units tall
+    }));
+  };
+
   return (
-    <div className="flex w-full flex-col items-center py-4">
-      <div className="grid sm:grid-cols-2 sm:gap-8 md:grid-cols-3 lg:gap-8  w-full lg:px-10 py-6">
+    <div className="flex w-full items-center py-4">
+      <ResponsiveReactGridLayout
+        className="layout w-full h-full"
+        breakpoints={{ lg: 1024, md: 768, sm: 640, xs: 450}}
+        cols={{ lg: 4, md: 3, sm: 2, xs: 1, xxs: 1 }}
+        layouts={{ lg: generateLayout(), md: generateLayout(), sm: generateLayout() }}
+        isDraggable={true}
+        isResizable={false}
+      >
         {subjectsList.map((subject, index) => (
           <div key={index} className="card hover:shadow-lg cursor-pointer mb-6 sm:m-0">
             <div style={{ backgroundColor: getRandomPastelColor() }} className="p-4 rounded-t-md">
@@ -39,7 +62,7 @@ const Subjects: React.FC = () => {
             </div>
           </div>
         ))}
-      </div>
+      </ResponsiveReactGridLayout>
     </div>
   );
 };
