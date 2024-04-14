@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { WidthProvider, Responsive } from 'react-grid-layout';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
-import { subject as subjectApi} from 'api/routes';
+import { subjectApi as subjectApi} from 'api/routes';
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 

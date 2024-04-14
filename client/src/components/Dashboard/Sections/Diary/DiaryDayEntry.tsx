@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { Tooltip } from 'react-tooltip'
 
 import { PiNotebook } from "react-icons/pi";
-import { homework as homeworkApi } from 'api/routes';
+import { CiEdit } from "react-icons/ci";
+import { homeworkApi, lessonApi} from 'api/routes';
 
 interface DiaryEntryProps {
   entry: Entry;
@@ -61,7 +62,7 @@ const DiaryDayEntry: React.FC<DiaryEntryProps> = ({ entry }) => {
     await homeworkApi.setHomeworkCompleted(homework.id, !isHomeworkChecked);
   };
 
-  const getTooltipText = (mark) => {
+  const getMarkTooltipText = (mark) => {
     let prefix = 'Mark for ';
     if (mark.type === 'homework') {
       return prefix + homework;
@@ -72,8 +73,13 @@ const DiaryDayEntry: React.FC<DiaryEntryProps> = ({ entry }) => {
     }
   };
 
+  const onEditButtonClick = async () => {
+    const lessonDetails = await lessonApi.getLesson(lessonId);
+    
+  };
+
   return (
-    <div className={`px-2 py-1 ${attended? '' : ''}`}>
+    <div className={`px-2 py-1 ${group? '' : ''}`}>
       <div className="flex">
         <div className="flex-grow p-1">
           <span className="text-xs font-semibold">{order}. </span>
@@ -114,7 +120,7 @@ const DiaryDayEntry: React.FC<DiaryEntryProps> = ({ entry }) => {
                           items-center justify-center text-white font-semibold 
                           ${colorMap[mark.value]}`}
               data-tooltip-id="tooltip"
-              data-tooltip-content={getTooltipText(mark)}
+              data-tooltip-content={getMarkTooltipText(mark)}
               data-tooltip-place="top">
             {mark.value}
             </button>
@@ -122,8 +128,24 @@ const DiaryDayEntry: React.FC<DiaryEntryProps> = ({ entry }) => {
 
           ))}
 
+        {/* Lesson edit button for teacher */}
+        {group ? (
+        <div>
+          <Tooltip id="tooltip" />
+          <button onClick={onEditButtonClick}
+            className={`px-1.5 py-0.5 mr-1 max-w-min max-h-min h-fit rounded flex 
+                        items-center justify-center font-semibold `}
+            data-tooltip-id="tooltip"
+            data-tooltip-content="Edit this lesson"
+            data-tooltip-place="top">
+            <CiEdit size={24}/>
+          </button>
         </div>
 
+        ) : ''}
+
+
+        </div>
 
       </div>
 
