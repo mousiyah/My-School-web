@@ -7,6 +7,7 @@ import Sidebar from './Sidebar/Sidebar';
 import Diary from './Sections/Diary/Diary';
 import Homeworks from './Sections/Homeworks/Homeworks';
 import Subjects from './Sections/Subjects/Subjects';
+import Lesson from './Sections/Lessons/Lesson';
 
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
@@ -33,6 +34,7 @@ const Dashboard: React.FC = () => {
     diary: <Diary/>,
     homeworks: <Homeworks/>,
     subjects: <Subjects/>,
+    lesson: <Lesson/>
   };
 
 

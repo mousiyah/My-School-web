@@ -1,7 +1,10 @@
 import React from 'react';
 import { useAuth } from 'hooks/useAuth';
+import { useNavigate } from 'hooks/useNavigate';
+
 import ProfileBtn from './ProfileBtn';
 import Logo from 'components/Logo';
+
 import { MdMenu } from 'react-icons/md';
 import { IoClose } from "react-icons/io5";
 
@@ -12,11 +15,17 @@ interface TopbarProps {
 const Topbar: React.FC<TopbarProps> = ({ onToggleSidebar }) => {
 
   const { logout } = useAuth();
+  const { navigateToLogin } = useNavigate();
+
+  const onLogoutClick = () => {
+    logout();
+    navigateToLogin();
+  }
 
   const ProfileBtnDropdownItems = [
     { label: "Profile", onClick: () => console.log("Profile clicked") },
     { label: "Settings", onClick: () => console.log("Settings clicked") },
-    { label: "Logout", onClick: logout }
+    { label: "Logout", onClick:  onLogoutClick}
   ];
 
   return (

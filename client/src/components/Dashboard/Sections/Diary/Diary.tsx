@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import DiaryDay from './DiaryDay';
-import DiaryDatePicker from './DiaryDatePicker';
+import DiaryHeader from './DiaryHeader';
 import { diaryApi } from 'api/routes';
 
 const Diary: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [diaryData, setDiaryData] = useState([]);
+
+  const views = ['week', 'list'];
+  const [viewMode, setViewMode] = useState(views[0]);
 
   useEffect(() => {
     fetchWeekData();
@@ -47,21 +50,27 @@ const Diary: React.FC = () => {
 };
 
   return (
-    <div className="flex w-full flex-col items-center">
-      <DiaryDatePicker
+    <div className="w-full items-center">
+      
+      <DiaryHeader
         selectedDate={selectedDate}
         setSelectedDate={setSelectedDate}
+        views={views}
+        viewMode={viewMode}
+        setViewMode={setViewMode}
       />
 
       {/* Large screens: render one week at a time */}
-      <div className="hidden lg:flex w-full border-box px-2 space-x-1">
+      <div className={`w-full border-box px-2 space-x-1 
+          ${viewMode === 'week' ? 'hidden lg:flex' : 'lg:block'}`}>
         {[...Array(6)].map((_, weekIndex) => (
           <DiaryDay key={getDate(weekIndex).getTime()} date={getDate(weekIndex)} diaryDayData={diaryData[weekIndex]} />
         ))}
       </div>
 
       {/* Small and medium screens: render one day at a time */}
-      <div className="lg:hidden flex w-full border-box px-2">
+      <div className={`lg:hidden flex w-full border-box px-2
+              ${viewMode === 'week' ? '' : 'hidden'}`}>
           <DiaryDay
             date={selectedDate}
             diaryDayData={diaryData[getWeekIndex(selectedDate)]}

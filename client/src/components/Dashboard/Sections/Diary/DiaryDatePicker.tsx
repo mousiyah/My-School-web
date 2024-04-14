@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import DatePicker, { registerLocale } from 'react-datepicker';
+import DatePicker from 'react-datepicker';
 import { useClickOutside } from 'hooks/useClickOutside';
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -7,24 +7,26 @@ import { enGB } from 'date-fns/locale/en-GB';
 
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 
+import { registerLocale } from 'react-datepicker';
 registerLocale('en-GB', enGB);
 
 interface DiaryDatePickerProps {
     selectedDate: Date;
-    setSelectedDate: (date: Date) => void;
+    setSelectedDate: (date: Date) =>void;
+    handleDateChange: (date: Date) => void;
+    isDatePickerOpen: boolean;
+    toggleDatePicker: () => void;
+    datePickerRef: React.RefObject<HTMLDivElement>;
 }
 
 const DiaryDatePicker: React.FC<DiaryDatePickerProps> = ({
     selectedDate,
     setSelectedDate,
+    handleDateChange,
+    isDatePickerOpen,
+    toggleDatePicker,
+    datePickerRef,
 }) => {
-    
-    const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
-    const datePickerRef = useRef();
-
-    const handleDateChange = (date: Date) => {
-        setSelectedDate(date);
-    };
 
     const handlePrevWeek = () => {
         const prevWeek = new Date(selectedDate);
@@ -50,16 +52,6 @@ const DiaryDatePicker: React.FC<DiaryDatePickerProps> = ({
         setSelectedDate(nextDay);
     };
 
-    const toggleDatePicker = () => {
-        setIsDatePickerOpen(!isDatePickerOpen);
-    }
-
-    const closeDatePicker = () => {
-        setIsDatePickerOpen(false);
-    }
-
-    useClickOutside(datePickerRef, closeDatePicker);
-
     const getWeekRange = (date: Date) => {
         const startDate = new Date(date);
         startDate.setDate(date.getDate() - date.getDay() + (date.getDay() === 0 ? -6 : 1));
@@ -77,60 +69,54 @@ const DiaryDatePicker: React.FC<DiaryDatePickerProps> = ({
     };
 
     return (
-        <div className="flex w-full justify-between items-center mb-4 px-2">
-            <div className="flex items-center mx-auto">
-
-
+        <div className="flex items-center justify-between">
+            <div className="flex items-center">
+                
                 {/* Small and medium screens */}
-                <button className="lg:hidden" onClick={handlePrevDay}>
-                    <IoIosArrowBack />
+                <button className="lg:hidden cursor-pointer" onClick={handlePrevDay}>
+                <IoIosArrowBack />
                 </button>
 
                 {/* Large screens */}
-                <button className="hidden lg:block" onClick={handlePrevWeek}>
+                <button className="hidden lg:block cursor-pointer" onClick={handlePrevWeek}>
                     <IoIosArrowBack />
                 </button>
 
-                <div>
-                    <button
-                        onClick={toggleDatePicker}
-                        className="relative w-fit lg:w-96 mx-2 btn-white w-96">
-
-                        <div className="lg:hidden">{selectedDate.toLocaleDateString()}</div>
-                        <div className="hidden lg:block">{getWeekRange(selectedDate)}</div>
-                        
-                        {isDatePickerOpen && (
-                            <div className="absolute top-full inset-0 z-50 mt-2" ref={datePickerRef}>
-                                <DatePicker
-                                    selected={selectedDate}
-                                    onChange={handleDateChange}
-                                    className="text-center border border-gray-300 p-1 mx-2 rounded"
-                                    dateFormat="MMMM d"
-                                    locale="en-GB"
-                                    open={isDatePickerOpen}
-                                    inline
-                                />
-                            </div>
-                        )}
-                    </button>
+                <div className="flex cursor-pointer justify-center items-center relative w-fit lg:w-96 mx-2 btn-white w-96">
+                    <div className="lg:hidden">{selectedDate.toLocaleDateString()}</div>
+                    <div className="hidden lg:block">{getWeekRange(selectedDate)}</div>
+                    {isDatePickerOpen && (
+                        <div className="absolute top-full inset-0 z-50 mt-2" ref={datePickerRef}>
+                            <DatePicker
+                                selected={selectedDate}
+                                onChange={handleDateChange}
+                                className="text-center border border-gray-300 p-1 mx-2 rounded"
+                                dateFormat="MMMM d"
+                                locale="en-GB"
+                                open={isDatePickerOpen}/>
+                        </div>
+                    )}
                 </div>
 
                 {/* Small and medium screens */}
-                <button className="lg:hidden" onClick={handleNextDay}>
+                <button className="lg:hidden cursor-pointer" onClick={handleNextDay}>
                     <IoIosArrowForward />
                 </button>
 
                 {/* Large screens */}
-                <button className="hidden lg:block" onClick={handleNextWeek}>
+                <button className="hidden lg:block cursor-pointer" onClick={handleNextWeek}>
                     <IoIosArrowForward />
                 </button>
 
-                
             </div>
-            <button className="btn-white" onClick={() => handleDateChange(new Date())}>
+
+            <button onClick={() => handleDateChange(new Date())}
+                    className="btn-white cursor-pointer">
                 Today
             </button>
-        </div>
+
+    </div>
+
     );
 };
 

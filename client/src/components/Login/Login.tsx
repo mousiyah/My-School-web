@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from 'hooks/useAuth.ts';
+import { useNavigate } from 'hooks/useNavigate';
 
 import InputBox from './InputWithIcon.tsx';
 import Logo from 'components/Logo.tsx';
@@ -16,6 +17,8 @@ const Login: React.FC = () => {
   const [error, setError] = useState('');
   const [emailEntered, setEmailEntered] = useState(false);
   const [signinSuccess, setSigninSuccess] = useState(false);
+
+  const { navigateToDashboard } = useNavigate();
 
   const validateEmailForm = () => {
     if (!email.trim()) {
@@ -53,7 +56,7 @@ const Login: React.FC = () => {
     
     try {
       await login(email, password);
-
+      navigateToDashboard();
       setSigninSuccess(true);
       setError('Login successful');
     } catch (error) {

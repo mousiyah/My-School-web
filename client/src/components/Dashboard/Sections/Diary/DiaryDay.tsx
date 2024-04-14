@@ -14,7 +14,7 @@ const DiaryDay: React.FC<DiaryDayProps> = ({ date, diaryDayData }) => {
   };
 
   return (
-    <div className="w-full h-full border-box flex-grow rounded-md text-sm">
+    <div className="w-full h-full border-box rounded-md text-sm">
       <div className={`flex justify-between text-white py-3 px-3 ${isToday() ? 'bg-primary-dark' : 'bg-primary'}`}>
         <span>{date.toLocaleDateString('en-GB', { weekday: 'long' })}</span>
 
@@ -25,8 +25,12 @@ const DiaryDay: React.FC<DiaryDayProps> = ({ date, diaryDayData }) => {
         
       </div>
       <div className="text-xs">
-        {diaryDayData ? diaryDayData.map((entry, index) => 
-          <DiaryDayEntry key={entry.lessonId} entry={entry}/>) : null}
+        {diaryDayData != null && diaryDayData.length != 0 ? diaryDayData.map((entry, index) => 
+          <DiaryDayEntry key={entry.lessonId} entry={entry}/>) : 
+            <div className="w-full h-full text-center px-2 py-5">
+              <p className="text-base">No lessons</p>
+            </div>
+        }
       </div>
     </div>
   );

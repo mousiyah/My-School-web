@@ -4,6 +4,7 @@ module.exports = {
   userWithEmailExists,
   loginUser,
   getUserEmail,
+  getUserRole,
 };
 
 
@@ -32,6 +33,15 @@ async function getUserEmail(req, res) {
     const userId = req.userId;
     const email = await authService.getUserEmail(userId);
     res.status(200).json({ email });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+async function getUserRole(req, res) {
+  try {
+    const role = req.userRole;
+    res.status(200).json({ role });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

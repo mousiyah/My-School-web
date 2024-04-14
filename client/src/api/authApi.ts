@@ -13,4 +13,8 @@ export const authApi = {
     const response = await api.get('auth/email');
     return response.data.email;
   },
+  getUserRole: async () => {
+    const response = await api.get('auth/role');
+    return response.data.role;
+  }
 };

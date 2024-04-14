@@ -9,6 +9,10 @@
       @apply py-2 px-4 rounded-lg border border-gray-300 hover:bg-gray-100;
     }
 
+    .btn-disable {
+      @apply py-2 px-4 rounded-lg border border-gray-300 bg-gray-200 text-gray-500 cursor-auto;
+    }
+
     .btn-round{
       @apply rounded-full py-2.5;
     }

@@ -4,19 +4,16 @@ import useSignIn from 'react-auth-kit/hooks/useSignIn';
 import useSignOut from 'react-auth-kit/hooks/useSignOut';
 import createRefresh from 'react-auth-kit/createRefresh';
 
-import { useNavigate } from 'hooks/useNavigate';
 import { authApi } from 'api/authApi';
 
 export const useAuth = () => {
   const [loading, setLoading] = useState(false);
   const signIn = useSignIn();
   const signOut = useSignOut();
-  const { navigateToDashboard, navigateToLogin } = useNavigate();
 
   const logout = async (): Promise<void> => {
     setLoading(true);
     await signOut();
-    navigateToLogin();
     setLoading(false);
   };
 
@@ -33,7 +30,6 @@ export const useAuth = () => {
           loggedIn: "true",
         }
       })) {
-        navigateToDashboard();
       }
       setLoading(false);
     } catch (error) {
