@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { studentApi } from 'api/studentApi';
+import { homework, subject } from 'api/routes';
 
 const Homeworks: React.FC = () => {
   const [subjectsList, setSubjectsList] = useState<{ id: number; name: string }[]>([]);
@@ -13,12 +13,12 @@ const Homeworks: React.FC = () => {
   }, []);
 
   const fetchSubjectList = async () => {
-    const subjects = await studentApi.getGroupSubjects();
+    const subjects = await subject.getMyGroupSubjects();
     setSubjectsList(subjects);
   };
 
   const fetchHomeworks = async () => {
-    const homeworks = await studentApi.getUpcomingHomeworks();
+    const homeworks = await homework.getUpcomingHomeworks();
     console.log(homeworks);
     setHomeworks(homeworks);
   };

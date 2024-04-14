@@ -1,13 +1,11 @@
 const db = require('../models');
-const studentService = require('./studentService');
 
 module.exports = {
     getStudentSubjects,
     getGroupSubjects,
   }
 
-async function getStudentSubjects(userId) {
-  const student = await studentService.getStudentByUserId(userId);
+async function getStudentSubjects(student) {
   const groupId = await student.groupId;
   return await getGroupSubjects(groupId);
 }

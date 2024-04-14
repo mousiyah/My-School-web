@@ -8,6 +8,7 @@ module.exports = {
   loginUser,
   verifyAccessToken,
   getUserEmail,
+  getUserRole,
 };
 
 async function userWithEmailExists(email) {
@@ -49,6 +50,12 @@ async function getUserEmail(userId) {
   return user.email;
 }
 
+async function getUserRole(userId) {
+  const user = await getUserById(userId);
+  const role = await db.role.findByPk(user.roleId)
+  return role.name;
+}
+
 async function getUserByEmail(email) {
   try {
     const user = await db.user.findOne({ where: { email: email } });
@@ -60,7 +67,7 @@ async function getUserByEmail(email) {
 
 async function getUserById(userId) {
   try {
-    const user = await db.user.findOne({ where: { id: userId } });
+    const user = await db.user.findByPk(userId);
     return user;
   } catch (error) {
     throw new Error('Internal server error');

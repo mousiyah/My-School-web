@@ -35,10 +35,16 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    group: {
+    letter: {
       type: DataTypes.STRING,
       allowNull: false
-    }
+    },
+    name: {
+      type: DataTypes.VIRTUAL,
+      get() {
+        return `${this.year}${this.letter}`;
+      }
+    },
   }, {
     sequelize,
     timestamps: true,

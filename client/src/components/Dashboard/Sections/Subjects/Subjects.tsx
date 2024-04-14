@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { WidthProvider, Responsive } from 'react-grid-layout';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
-import { studentApi } from 'api/studentApi';
+import { subject as subjectApi} from 'api/routes';
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
@@ -14,7 +14,7 @@ const Subjects: React.FC = () => {
   }, []);
 
   const fetchSubjectList = async () => {
-    const subjects = await studentApi.getGroupSubjects();
+    const subjects = await subjectApi.getMyGroupSubjects();
     setSubjectsList(subjects);
   };
 

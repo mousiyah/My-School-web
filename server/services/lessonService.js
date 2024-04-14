@@ -2,6 +2,7 @@ const db = require('../models');
 
 module.exports = {
     getLessonsForDayByGroupId,
+    getLessonsForDayByTeacherId,
   }
 
 async function getLessonsForDayByGroupId(groupId, date) {
@@ -25,4 +26,26 @@ async function getLessonsForDayByGroupId(groupId, date) {
     } catch (error) {
       throw new Error('Failed to fetch lessons' + error);
     }
+}
+
+async function getLessonsForDayByTeacherId(teacherId, date) {
+  try {
+    const lessons = await db.lesson.findAll({
+      where: {
+        teacherId: teacherId,
+        date: date
+      },
+      order: [['order', 'ASC']],
+      include: [
+        { model: db.subject },
+        { model: db.group },
+        { model: db.room },
+        { model: db.homework },
+        { model: db.classwork },
+      ],
+    });
+    return lessons;
+  } catch (error) {
+    throw new Error('Failed to fetch lessons' + error);
+  }
 }

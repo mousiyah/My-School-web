@@ -2,20 +2,30 @@ import React, { useState } from 'react';
 import { Tooltip } from 'react-tooltip'
 
 import { PiNotebook } from "react-icons/pi";
-import { studentApi } from 'api/studentApi';
+import { homework as homeworkApi } from 'api/routes';
 
 interface DiaryEntryProps {
   entry: Entry;
-  order: number;
 }
 
 interface Entry {
   lessonId: string;
-  subject: string;
+  order: number;
+  subject: {
+    id: number,
+    name: string
+  };
+  group: {
+    id: number,
+    name: string
+  };
   teacher: string;
   room: string;
-  homework: string;
-  isHomeworkCompleted: boolean;
+  homework: {
+    id: number,
+    name: string;
+    completed: boolean;
+  };
   classwork: string;
   marks: {
     type: string;
@@ -24,8 +34,8 @@ interface Entry {
   attended: boolean;
 }
 
-const DiaryEntry: React.FC<DiaryEntryProps> = ({ entry, order}) => {
-  const { lessonId, subject, teacher, room, homework, isHomeworkCompleted, classwork, marks, attended} = entry;
+const DiaryDayEntry: React.FC<DiaryEntryProps> = ({ entry }) => {
+  const { lessonId, order, subject, group, teacher, room, homework, classwork, marks, attended} = entry;
 
   const colorMap = {
     5: 'bg-green-600',
@@ -44,11 +54,11 @@ const DiaryEntry: React.FC<DiaryEntryProps> = ({ entry, order}) => {
     7: '13:15-14:00',
   };
 
-  const [isHomeworkChecked, setIsHomeworkChecked] = useState(isHomeworkCompleted);
+  const [isHomeworkChecked, setIsHomeworkChecked] = useState(homework.completed);
 
   const homeworkCheckboxToggle = async () => {
     setIsHomeworkChecked(!isHomeworkChecked);
-    await studentApi.setHomeworkCompleted(lessonId, !isHomeworkChecked);
+    await homeworkApi.setHomeworkCompleted(homework.id, !isHomeworkChecked);
   };
 
   const getTooltipText = (mark) => {
@@ -67,10 +77,18 @@ const DiaryEntry: React.FC<DiaryEntryProps> = ({ entry, order}) => {
       <div className="flex">
         <div className="flex-grow p-1">
           <span className="text-xs font-semibold">{order}. </span>
-          <span className="text-xs font-semibold cursor-pointer hover:underline">{subject}</span>
+          <span className="text-xs font-semibold cursor-pointer hover:underline">{subject.name}</span>
           <div className="text-xxs text-gray-500">
             <span>{timeMap[order]}</span> <br/>
-            <span>{teacher}, </span>
+
+
+            {teacher ? (
+              <span>{teacher}, </span>
+            ) : (group ? (
+              <span>{group.name}, </span>
+            ) : '')}
+
+
             <span>room {room}</span>
           </div>
 
@@ -86,7 +104,8 @@ const DiaryEntry: React.FC<DiaryEntryProps> = ({ entry, order}) => {
         
         <div className="flex w-fit h-min mt-1 text-xs">
 
-        {marks.map((mark, index) => (
+        
+        {marks && marks.map((mark, index) => (
 
           <div key={index}>
             <Tooltip id="tooltip" />
@@ -108,27 +127,33 @@ const DiaryEntry: React.FC<DiaryEntryProps> = ({ entry, order}) => {
 
       </div>
 
-      {!attended ? (
+      {attended==false ? (
         <div className="mb-1 ml-1 bg-red-600 w-fit px-1 rounded">
           <span className="text-white">absent</span>
         </div>
       ) : ''}
 
-      {homework ? (
+      {homework.id && homework.completed != null ? (
       <div className="flex cursor-pointer" onClick={homeworkCheckboxToggle}>
         <div className="bg-indigo-100 py-0.5 px-1 rounded flex items-baseline cursor-pointer">
           <input key={Math.random()} type="checkbox" id={`checkbox-${lessonId}`} checked={isHomeworkChecked}
             onChange={homeworkCheckboxToggle}/>
+
           <label htmlFor={`checkbox-${lessonId}`}
                 className={`text-xs whitespace-normal ml-2 cursor-pointer ${isHomeworkChecked ? 'line-through' : ''}`}>
-            {homework}</label>
+            {homework.name}</label>
+            
         </div>
       </div>
-      ) : ''}
+      ) : (homework.id && (
+        <div className="bg-indigo-100 py-0.5 px-1 rounded flex items-baseline cursor-pointer">
+        <label className="text-xs whitespace-normal ml-2 cursor-pointer">
+            {homework.name}</label></div>
+      ))}
 
       <hr className="border-gray-300 border-t-1 p-0 m-0 mt-2 w-full"></hr>
     </div>
   );
 };
 
-export default DiaryEntry;
+export default DiaryDayEntry;

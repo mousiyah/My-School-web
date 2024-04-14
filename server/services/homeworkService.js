@@ -1,27 +1,14 @@
 const db = require('../models');
-const studentService = require('./studentService');
 
 module.exports = {
-    getStudentHomework,
     setHomeworkCompleted,
     getUpcomingHomeworks,
-  }
-
-async function getStudentHomework(studentId, homeworkId) {
-    try {
-      return db.studentHomework.findOne({
-        where: { studentId: studentId,
-                 homeworkId: homeworkId }
-      });
-    } catch (error) {
-      throw new Error('Failed to fetch homework status');
-    }
+    getStudentHomework,
 }
 
-async function setHomeworkCompleted(userId, lessonId, isCompleted) {
+async function setHomeworkCompleted(student, homeworkId, isCompleted) {
     try {
-      const student = await studentService.getStudentByUserId(userId);
-      const homework = await getHomeworkByLessonId(lessonId);
+      const homework = await db.homework.findByPk(homeworkId);
 
       const studentHomework = await getStudentHomework(student.id, homework.id);
       studentHomework.completed = isCompleted;
@@ -29,24 +16,12 @@ async function setHomeworkCompleted(userId, lessonId, isCompleted) {
       await studentHomework.save();
 
     } catch (error) {
-      throw new Error('Failed to update homework completed status');
+      throw new Error(error);
     }
 }
 
-async function getHomeworkByLessonId(lessonId) {
-    try {
-      const homework = await db.homework.findOne({
-        where: { lessonId: lessonId },
-      });
-      return homework;
-    } catch (error) {
-      throw new Error('Failed to fetch homework');
-    }
-}
-
-async function getUpcomingHomeworks(userId) {
+async function getUpcomingHomeworks(student) {
   try {
-    const student = await studentService.getStudentByUserId(userId);
     const homeworks = await student.getHomework();
 
     const today = new Date();
@@ -82,7 +57,25 @@ async function getUpcomingHomeworks(userId) {
   }
 }
 
+async function getStudentHomework(studentId, homeworkId) {
+  try {
+    return db.studentHomework.findOne({
+      where: { studentId: studentId,
+               homeworkId: homeworkId }
+    });
+  } catch (error) {
+    throw new Error('Failed to fetch homework status');
+  }
+}
 
-
-
+async function getHomeworkByLessonId(lessonId) {
+  try {
+    const homework = await db.homework.findOne({
+      where: { lessonId: lessonId },
+    });
+    return homework;
+  } catch (error) {
+    throw new Error('Failed to fetch homework');
+  }
+}
 

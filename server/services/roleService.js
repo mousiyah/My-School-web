@@ -2,6 +2,7 @@ const db = require('../models');
 
 module.exports = {
     getStudentByUserId,
+    getTeacherByUserId,
   }
 
 async function getStudentByUserId(userId) {
@@ -14,4 +15,15 @@ async function getStudentByUserId(userId) {
     } catch (error) {
       throw new Error('Failed to fetch student');
     }
+}
+
+async function getTeacherByUserId(userId) {
+  try {
+    const teacher = await db.teacher.findOne({
+      where: { userId: userId }
+    });
+    return teacher;
+  } catch (error) {
+    throw new Error('Failed to fetch teacher');
+  }
 }

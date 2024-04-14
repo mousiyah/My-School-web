@@ -1,6 +1,6 @@
 'use strict';
 
-const { student, lesson, group, homework } = require('../models');
+const { student, lesson, group } = require('../models');
 const faker = require('faker');
 
 /** @type {import('sequelize-cli').Migration} */
@@ -13,14 +13,14 @@ module.exports = {
     const homeworkData = [];
 
     // Create homework entries for some lessons
-    for (const lesson of lessons) {
+    for (const lessonItem of lessons) {
 
       if (Math.random() < 0.5) {
         const randomHomeworkName = faker.lorem.words(3);
 
         const homeworkEntry = {
           name: randomHomeworkName,
-          lessonId: lesson.id,
+          lessonId: lessonItem.id,
           createdAt: new Date(),
           updatedAt: new Date()
         };

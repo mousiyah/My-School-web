@@ -6,8 +6,10 @@ const authenticateToken = (req, res, next) => {
   if (token == null) return res.sendStatus(401);
 
   authService.verifyAccessToken(token)
-    .then(userId => {
+    .then(async userId => {
       req.userId = userId;
+      req.userRole = await authService.getUserRole(userId);
+
       next();
     })
     .catch(error => {

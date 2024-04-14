@@ -9,19 +9,21 @@ module.exports = {
 
     const groupsToInsert = [];
 
-    for (let i = 0; i < 10; i++) {
-      const randomSchoolId = faker.random.arrayElement(schools).id;
-      const groupName = faker.random.alpha().toUpperCase();
-      const year = faker.datatype.number({ min: 1, max: 11 }); // Updated usage
+    const groupLetters = ["A", "B", "C", "D"];
 
-      groupsToInsert.push({
-        name: groupName,
-        year: year,
-        schoolId: randomSchoolId,
-        headteacherId: null,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      });
+    for (let year = 1; year <= 9; year++) {
+      for (const letter of groupLetters) {
+        const randomSchoolId = faker.random.arrayElement(schools).id;
+
+        groupsToInsert.push({
+          letter: `${letter}`,
+          year: year,
+          schoolId: randomSchoolId,
+          headteacherId: null,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        });
+      }
     }
 
     await queryInterface.bulkInsert('groups', groupsToInsert, {});

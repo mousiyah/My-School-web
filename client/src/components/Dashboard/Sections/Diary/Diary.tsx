@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import DiaryDay from './DiaryDay';
 import DiaryDatePicker from './DiaryDatePicker';
-import { studentApi } from 'api/studentApi';
+import { diary } from 'api/routes';
 
 const Diary: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -30,7 +30,7 @@ const Diary: React.FC = () => {
   };
 
   const fetchDiaryDay = async (date) => {
-    const diaryDay = await studentApi.getDiaryDay(date);
+    const diaryDay = await diary.getDiaryDay(date);
     return diaryDay;
   };
 

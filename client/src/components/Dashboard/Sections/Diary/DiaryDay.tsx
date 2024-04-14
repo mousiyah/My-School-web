@@ -1,5 +1,5 @@
 import React from 'react';
-import DiaryEntry from './DiaryDayEntry';
+import DiaryDayEntry from './DiaryDayEntry';
 
 interface DiaryDayProps {
   date: Date
@@ -26,7 +26,7 @@ const DiaryDay: React.FC<DiaryDayProps> = ({ date, diaryDayData }) => {
       </div>
       <div className="text-xs">
         {diaryDayData ? diaryDayData.map((entry, index) => 
-          <DiaryEntry key={entry.lessonId} entry={entry} order={index+1} />) : null}
+          <DiaryDayEntry key={entry.lessonId} entry={entry}/>) : null}
       </div>
     </div>
   );

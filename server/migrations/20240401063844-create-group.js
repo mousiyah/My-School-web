@@ -9,7 +9,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      name: {
+      letter: {
         type: Sequelize.STRING,
         allowNull: false,
       },
@@ -43,13 +43,13 @@ module.exports = {
 
     await queryInterface.addConstraint('groups', {
       type: 'unique',
-      fields: ['schoolId', 'year', 'name'],
-      name: 'unique_group_schoolId_year_name_constraint'
+      fields: ['schoolId', 'year', 'letter'],
+      name: 'unique_group_schoolId_year_letter_constraint'
     });
 
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.removeConstraint('groups', 'unique_group_schoolId_year_name_constraint');
+    await queryInterface.removeConstraint('groups', 'unique_group_schoolId_year_letter_constraint');
     await queryInterface.dropTable('groups');
   }
 };
