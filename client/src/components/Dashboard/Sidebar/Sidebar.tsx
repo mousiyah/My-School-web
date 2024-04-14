@@ -1,10 +1,9 @@
-import React from 'react';
-
-import { USER_ROLES } from 'constants/roles';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { RootState } from 'store'; 
+import { RootState } from 'store';
+import { useNavigate } from 'hooks/useNavigate';
+import { USER_ROLES } from 'constants/roles';
 
-import { AiOutlineHome } from "react-icons/ai";
 import { IoBookOutline } from "react-icons/io5";
 import { GoTasklist } from "react-icons/go";
 import { PiNotebook } from "react-icons/pi";
@@ -15,22 +14,45 @@ import SidebarButton from './SidebarBtn';
 
 interface SidebarProps {
   isOpen?: boolean;
-  onSidebarClick: (itemName: string) => void;
-  selectedSection: string;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ isOpen, onSidebarClick, selectedSection }) => {
-  
+const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
+
+  const [selected, setSelected] = useState<string>("Diary");
+
   const userRole = useSelector((state: RootState) => state.user.role);
 
+  const { 
+    navigateToDiary, 
+    navigateToHomeworks, 
+    navigateToSubjects, 
+    navigateToAnnouncements, 
+    navigateToInbox
+  } = useNavigate();
+
+
+  const handleItemClick = (sectionName: string, navigateFunction: () => void) => {
+    setSelected(sectionName);
+    navigateFunction();
+  };
+
   const sidebarItems = [
-    { icon: IoBookOutline, name: 'Diary' },
+    { icon: IoBookOutline, name: 'Diary', 
+    onClick: () => handleItemClick('Diary', navigateToDiary) },
 
-    ...(userRole == USER_ROLES.STUDENT ? [{ icon: GoTasklist, name: 'Homeworks' }] : []),
+    ...(userRole === USER_ROLES.STUDENT ? 
+      [{ icon: GoTasklist, name: 'Homeworks', 
+      onClick: () => handleItemClick('Homeworks', navigateToHomeworks) }] : []),
 
-    { icon: PiNotebook, name: 'Subjects' },
-    { icon: GoCommentDiscussion, name: 'Announcements' },
-    { icon: CiMail, name: 'Inbox' },
+    { icon: PiNotebook, name: 'Subjects', 
+    onClick: () => handleItemClick('Subjects', navigateToSubjects) },
+
+    { icon: GoCommentDiscussion, name: 'Announcements', 
+    onClick: () => handleItemClick('Announcements', navigateToAnnouncements) },
+
+    { icon: CiMail, name: 'Inbox', 
+    onClick: () => handleItemClick('Inbox', navigateToInbox) },
+    
   ];
 
   return (
@@ -46,9 +68,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onSidebarClick, selectedSecti
           key={index}
           icon={item.icon}
           name={item.name}
-          selected={selectedSection === item.name.toLowerCase()}
+          selected={selected === item.name}
           showText={isOpen}
-          onClick={() => onSidebarClick(item.name.toLowerCase())}
+          onClick={item.onClick}
         />
       ))}
 

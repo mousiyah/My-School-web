@@ -11,9 +11,38 @@ export const useNavigate = () => {
         navigate("/dashboard", { replace: true });
     };
 
-    const navigateToLesson = (lessonId: string) => {
-        navigate(`/dashboard/lesson/`);
+    const navigateToDiary = () => {
+        navigate(`/dashboard/diary`);
     };
 
-    return { navigateToDashboard, navigateToLogin, navigateToLesson};
+    const navigateToHomeworks = () => {
+        navigate(`/dashboard/homeworks`);
+    };
+
+    const navigateToSubjects = () => {
+        navigate(`/dashboard/subjects`);
+    };
+
+    const navigateToAnnouncements = () => {
+        navigate(`/dashboard/announcements`);
+    };
+
+    const navigateToInbox = () => {
+        navigate(`/dashboard/inbox`);
+    };
+
+    const navigateToLesson = (lessonId: string) => {
+        navigate(`/dashboard/lesson/${lessonId}/edit`);
+    };
+
+    return { 
+        navigateToDashboard, 
+        navigateToLogin, 
+        navigateToDiary,
+        navigateToHomeworks,
+        navigateToSubjects,
+        navigateToAnnouncements,
+        navigateToInbox,
+        navigateToLesson
+    };
 }

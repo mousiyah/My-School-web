@@ -1,18 +1,12 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { useClickOutside } from 'hooks/useClickOutside';
-import { IoIosArrowDown } from "react-icons/io";
+import React from 'react';
+import { useParams } from 'react-router-dom';
 
-import { authApi } from 'api/authApi';
-
-interface LessonProps{
-  
-}
-
-const Lesson: React.FC<LessonProps> = ({ }) => {
+const Lesson: React.FC = () => {
+  const { lessonId } = useParams<{ lessonId: string }>(); // Extract lessonId from URL params
 
   return (
     <div>
-      dd
+      Lesson ID: {lessonId}
     </div>
   );
 };

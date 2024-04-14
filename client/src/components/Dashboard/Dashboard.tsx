@@ -1,42 +1,25 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'hooks/useNavigate';
+import { Outlet } from 'react-router-dom';
 import { useWindowSize } from 'react-use';
-import { useNavigate, useParams } from 'react-router-dom';
 
 import Topbar from './TopBar/Topbar';
 import Sidebar from './Sidebar/Sidebar';
-import Diary from './Sections/Diary/Diary';
-import Homeworks from './Sections/Homeworks/Homeworks';
-import Subjects from './Sections/Subjects/Subjects';
-import Lesson from './Sections/Lessons/Lesson';
 
 const Dashboard: React.FC = () => {
-  const navigate = useNavigate();
-  const { sectionName } = useParams<{ sectionName?: string }>();
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [isSidebarToggled, setSidebarToggled] = useState(false);
 
+  const { navigateToDiary } = useNavigate();
+
   useEffect(() => {
-    if (!sectionName || sectionName.trim() === '') {
-      navigate('/dashboard/diary');
-    }
-  }, [sectionName, navigate]);
-
-  const onSidebarClick = (sectionName: string) => {
-    navigate(`/dashboard/${sectionName}`);
-  };
-
+    navigateToDiary();
+  }, []);
+  
   const toggleSidebar = () => {
     setSidebarOpen(!isSidebarOpen);
     setSidebarToggled(true);
   };
-
-  const sectionComponents: { [key: string]: React.ReactNode } = {
-    diary: <Diary/>,
-    homeworks: <Homeworks/>,
-    subjects: <Subjects/>,
-    lesson: <Lesson/>
-  };
-
 
     const { width } = useWindowSize();
     useEffect(() => {
@@ -56,13 +39,10 @@ const Dashboard: React.FC = () => {
       
       <div className="flex w-full h-full border-box overflow-y-auto">
 
-        <Sidebar
-          isOpen={isSidebarOpen}
-          onSidebarClick={onSidebarClick}
-          selectedSection={sectionName || 'diary'}/>
+        <Sidebar isOpen={isSidebarOpen}/>
 
         <div className="w-full border-box h-full overflow-y-auto overflow-x-hidden py-4 px-10">
-          {sectionComponents[sectionName]}
+          <Outlet/>
         </div>
 
       </div>
