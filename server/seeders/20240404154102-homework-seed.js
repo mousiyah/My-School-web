@@ -1,6 +1,6 @@
 'use strict';
 
-const { student, lesson, group } = require('../models');
+const { student, lesson } = require('../models');
 const faker = require('faker');
 
 /** @type {import('sequelize-cli').Migration} */
@@ -8,7 +8,6 @@ module.exports = {
   async up(queryInterface, Sequelize) {
 
     const lessons = await lesson.findAll();
-    const groups = await group.findAll();
 
     const homeworkData = [];
 
