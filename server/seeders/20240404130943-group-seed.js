@@ -16,7 +16,7 @@ module.exports = {
         const randomSchoolId = faker.random.arrayElement(schools).id;
 
         groupsToInsert.push({
-          letter: `${letter}`,
+          letter: letter,
           year: year,
           schoolId: randomSchoolId,
           headteacherId: null,

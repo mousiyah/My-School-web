@@ -84,7 +84,7 @@ async function getTeacherDiaryEntry(lesson) {
         },
         group: {
           id: lesson.group.id,
-          name: lesson.group.fullname,
+          name: lesson.group.name,
         },
         room: lesson.room.name,
         homework: {
