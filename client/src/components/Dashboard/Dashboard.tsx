@@ -41,7 +41,7 @@ const Dashboard: React.FC = () => {
 
         <Sidebar isOpen={isSidebarOpen}/>
 
-        <div className="w-full border-box h-full overflow-y-auto overflow-x-hidden py-4 px-10">
+        <div className="w-full border-box h-full overflow-y-auto overflow-x-hidden">
           <Outlet/>
         </div>
 

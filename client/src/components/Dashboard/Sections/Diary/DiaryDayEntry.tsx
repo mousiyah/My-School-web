@@ -82,10 +82,10 @@ const DiaryDayEntry: React.FC<DiaryEntryProps> = ({ entry }) => {
     }
   };
 
-  const { navigateToLesson } = useNavigate();
+  const { navigateToLessonStudents } = useNavigate();
 
   const onEditButtonClick = async () => {
-    navigateToLesson(lessonId);
+    navigateToLessonStudents(lessonId);
   };
 
   return (

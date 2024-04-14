@@ -30,7 +30,7 @@ const Homeworks: React.FC = () => {
   };
 
   return (
-    <div className="flex w-full flex-col items-center">
+    <div className="flex w-full flex-col items-center py-10 px-10">
 
       <select defaultValue={0} className="select select-bordered border w-full max-w-xs">
         <option>All subjects</option>

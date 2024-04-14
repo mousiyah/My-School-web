@@ -6,6 +6,7 @@ module.exports = {
       colors: {
         primary: '#6666bc',
         'primary-dark': '#4646a0',
+        "primary-light": "#ededf7",
         'accent': '#ff8c80',
       },
       borderColor: theme => ({
@@ -20,6 +21,7 @@ module.exports = {
             light: {
                 "primary": "#6666bc", // Required
                 "primary-dark": "#4646a0",
+                "primary-light": "#ededf7",
                 //"primary-content": "",
                 "secondary": "", // Required
                 //"secondary-content": "",

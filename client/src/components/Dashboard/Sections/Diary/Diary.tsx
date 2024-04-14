@@ -50,7 +50,7 @@ const Diary: React.FC = () => {
 };
 
   return (
-    <div className="w-full items-center">
+    <div className="w-full items-center py-10 px-10">
       
       <DiaryHeader
         selectedDate={selectedDate}

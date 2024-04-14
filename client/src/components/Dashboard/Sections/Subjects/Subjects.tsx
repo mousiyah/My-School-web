@@ -38,7 +38,7 @@ const Subjects: React.FC = () => {
   };
 
   return (
-    <div className="flex w-full items-center py-4">
+    <div className="flex w-full items-center py-10 px-10">
       <ResponsiveReactGridLayout
         className="layout w-full h-full"
         breakpoints={{ lg: 1024, md: 768, sm: 640, xs: 450}}
