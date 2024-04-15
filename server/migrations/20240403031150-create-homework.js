@@ -13,6 +13,14 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull:false,
       },
+      description: {
+        type: Sequelize.TEXT,
+        allowNull: true,
+      },
+      isSubmittable: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+      },
       lessonId: {
         allowNull: false,
         type: Sequelize.INTEGER,

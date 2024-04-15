@@ -18,9 +18,11 @@ module.exports = {
       }
 
       const randomClassworkName = faker.lorem.words(2);
+      const randomClassworkDescription = faker.lorem.paragraphs();
 
       const classworkEntry = {
         name: randomClassworkName,
+        description: randomClassworkDescription,
         lessonId: lesson.id,
         createdAt: new Date(),
         updatedAt: new Date()

@@ -30,6 +30,7 @@ export const subjectApi = {
 export const lessonApi = {
   getLesson: async (lessonId) => {
     const response = await api.get('lesson/', { params: { lessonId } });
+    console.log(response.data)
     return response.data;
   },
 };

@@ -21,7 +21,15 @@ module.exports = (sequelize, DataTypes) => {
     name: {
       type: DataTypes.STRING,
       allowNull: false
-    }
+    },
+    description: {
+      type: DataTypes.TEXT,
+      allowNull: true
+    },
+    isSubmittable: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false
+    },
   }, {
     sequelize,
     timestamps: true,

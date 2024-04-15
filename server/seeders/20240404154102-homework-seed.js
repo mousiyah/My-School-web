@@ -16,9 +16,12 @@ module.exports = {
 
       if (Math.random() < 0.5) {
         const randomHomeworkName = faker.lorem.words(3);
+        const randomHomeworkDescription = faker.lorem.paragraphs();
 
         const homeworkEntry = {
           name: randomHomeworkName,
+          description: randomHomeworkDescription,
+          isSubmittable: (Math.random > 0.6),
           lessonId: lessonItem.id,
           createdAt: new Date(),
           updatedAt: new Date()

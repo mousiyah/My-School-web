@@ -4,14 +4,7 @@ const roleService = require('../services/roleService');
 const diaryService = require('../services/diaryService');
 const homeworkService = require('../services/homeworkService');
 const subjectService = require('../services/subjectService');
-
-
-module.exports = {
-  getDiaryDay,
-  setHomeworkCompleted,
-  getSubjects,
-  getUpcomingHomeworks,
-};
+const lessonService = require('../services/lessonService');
 
 async function getDiaryDay(req, res) {
   try {
@@ -95,3 +88,35 @@ async function getUpcomingHomeworks(req, res) {
     res.status(500).json({ error: error.message });
   }
 }
+
+async function getLesson(req, res) {
+  try {
+    const userId = req.userId;
+    const userRole = req.userRole;
+    const {lessonId} = req.query;
+
+    let lesson;
+    switch (userRole) {
+      case STUDENT_ROLE:
+        const student = await roleService.getStudentByUserId(userId);
+        lesson = await lessonService.getStudentLesson(student, lessonId);
+        break;
+      case TEACHER_ROLE:
+        const teacher = await roleService.getTeacherByUserId(userId);
+        lesson = await lessonService.getTeacherLesson(teacher, lessonId);
+        break;
+    }
+
+    res.status(200).json(lesson);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+module.exports = {
+  getDiaryDay,
+  setHomeworkCompleted,
+  getSubjects,
+  getUpcomingHomeworks,
+  getLesson,
+};

@@ -11,7 +11,11 @@ module.exports = {
       },
       name: {
         type: Sequelize.STRING,
-        allowNull:false,
+        allowNull: false,
+      },
+      description: {
+        type: Sequelize.TEXT,
+        allowNull: true,
       },
       lessonId: {
         allowNull: false,

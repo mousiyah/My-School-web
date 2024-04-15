@@ -10,4 +10,6 @@ router.get('/subjects', authenticateToken, controller.getSubjects);
 router.post('/homework/set-completed', authenticateToken, controller.setHomeworkCompleted);
 router.get('/homework/upcoming', authenticateToken, controller.getUpcomingHomeworks);
 
+router.get('/lesson', authenticateToken, controller.getLesson);
+
 module.exports = router;
