@@ -31,12 +31,20 @@ export const useNavigate = () => {
         navigate(`/dashboard/inbox`);
     };
 
+    const navigateToLessonDetails = (lessonId: string) => {
+        navigate(`/dashboard/lesson/${lessonId}/details`);
+    };
+
     const navigateToLessonEdit = (lessonId: string) => {
         navigate(`/dashboard/lesson/${lessonId}/edit`);
     };
 
     const navigateToLessonStudents = (lessonId: string) => {
         navigate(`/dashboard/lesson/${lessonId}/students`);
+    };
+
+    const navigateToLessonMyWork = (lessonId: string) => {
+        navigate(`/dashboard/lesson/${lessonId}/my-work`);
     };
 
     return { 
@@ -47,7 +55,9 @@ export const useNavigate = () => {
         navigateToSubjects,
         navigateToAnnouncements,
         navigateToInbox,
+        navigateToLessonDetails,
         navigateToLessonEdit,
         navigateToLessonStudents,
+        navigateToLessonMyWork,
     };
 }

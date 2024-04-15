@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'hooks/useNavigate';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { useWindowSize } from 'react-use';
 
 import Topbar from './TopBar/Topbar';
@@ -10,11 +10,15 @@ const Dashboard: React.FC = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [isSidebarToggled, setSidebarToggled] = useState(false);
 
+  const location = useLocation();
   const { navigateToDiary } = useNavigate();
 
   useEffect(() => {
-    navigateToDiary();
-  }, []);
+    const dashboardPattern = /^\/dashboard\/?$/;
+    if (dashboardPattern.test(location.pathname)) {
+      navigateToDiary();
+    }
+  }, [location, useNavigate]);
   
   const toggleSidebar = () => {
     setSidebarOpen(!isSidebarOpen);

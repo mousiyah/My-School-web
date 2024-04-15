@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-const LessonStudents: React.FC = () => {
+const LessonDetails: React.FC = () => {
   const { lessonId } = useParams<{ lessonId: string }>();
 
   return (
     <div className="w-full h-full">
-      students
+      details
     </div>
   );
 };
 
-export default LessonStudents;
+export default LessonDetails;

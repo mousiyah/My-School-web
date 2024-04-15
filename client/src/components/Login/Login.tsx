@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from 'hooks/useAuth.ts';
 import { useNavigate } from 'hooks/useNavigate';
 
-import InputBox from './InputWithIcon.tsx';
+import InputBox from '../common/InputWithIcon.tsx';
 import Logo from 'components/Logo.tsx';
 
 import visual from 'assets/visual_login.png';

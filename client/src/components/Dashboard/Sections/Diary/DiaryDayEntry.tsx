@@ -82,10 +82,10 @@ const DiaryDayEntry: React.FC<DiaryEntryProps> = ({ entry }) => {
     }
   };
 
-  const { navigateToLessonStudents } = useNavigate();
+  const { navigateToLessonEdit } = useNavigate();
 
   const onEditButtonClick = async () => {
-    navigateToLessonStudents(lessonId);
+    navigateToLessonEdit(lessonId);
   };
 
   return (
@@ -139,7 +139,7 @@ const DiaryDayEntry: React.FC<DiaryEntryProps> = ({ entry }) => {
 
           ))}
 
-        {/* Lesson edit button */}
+        {/* Lesson action buttons */}
         {userRole == USER_ROLES.TEACHER ? (
         <div>
           <Tooltip id="tooltip" />

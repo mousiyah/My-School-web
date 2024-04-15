@@ -8,7 +8,6 @@ import React from 'react';
 export const useClickOutside = (elementRef, callback) => {
     React.useEffect(() => {
         const handleClickOutside = (event) => {
-            event.preventDefault()
             if (elementRef && elementRef.current && !elementRef.current.contains(event.target)) {
                 callback()
             }

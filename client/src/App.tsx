@@ -25,6 +25,8 @@ import Homeworks from 'components/Dashboard/Sections/Homeworks/Homeworks';
 import Lesson from 'components/Dashboard/Sections/Lessons/Lesson';
 import LessonEdit from 'components/Dashboard/Sections/Lessons/LessonEdit';
 import LessonStudents from 'components/Dashboard/Sections/Lessons/LessonStudents';
+import LessonDetails from 'components/Dashboard/Sections/Lessons/LessonDetails';
+import LessonMyWork from 'components/Dashboard/Sections/Lessons/LessonMyWork';
 
 
 const App: React.FC = () => {
@@ -78,23 +80,37 @@ const App: React.FC = () => {
           <Subjects/>
         </RequireAuth>} />
 
-        {roleAllowedFor(USER_ROLES.TEACHER) && (
+        
         <Route path="/dashboard/lesson/:lessonId" element={
           <RequireAuth fallbackPath={'/login'}>
             <Lesson/>
           </RequireAuth>}> 
 
+          {roleAllowedFor(USER_ROLES.TEACHER) && (
           <Route path="/dashboard/lesson/:lessonId/edit" element={
             <RequireAuth fallbackPath={'/login'}>
               <LessonEdit/>
-            </RequireAuth>} />
+            </RequireAuth>} />)}
 
-            <Route path="/dashboard/lesson/:lessonId/students" element={
+          {roleAllowedFor(USER_ROLES.TEACHER) && (
+          <Route path="/dashboard/lesson/:lessonId/students" element={
+          <RequireAuth fallbackPath={'/login'}>
+            <LessonStudents/>
+          </RequireAuth>} />)}
+
+          {roleAllowedFor(USER_ROLES.STUDENT) && (
+          <Route path="/dashboard/lesson/:lessonId/details" element={
             <RequireAuth fallbackPath={'/login'}>
-              <LessonStudents/>
-            </RequireAuth>} />
+              <LessonDetails/>
+            </RequireAuth>} />)}
 
-        </Route>)}
+          {roleAllowedFor(USER_ROLES.STUDENT) && (
+          <Route path="/dashboard/lesson/:lessonId/my-work" element={
+          <RequireAuth fallbackPath={'/login'}>
+            <LessonMyWork/>
+          </RequireAuth>} />)}
+
+        </Route>
 
 
       </Route>
