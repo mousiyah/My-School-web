@@ -7,7 +7,7 @@ const NotFound: React.FC = () => {
   const { navigateToDashboard } = useNavigate();
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
+    <div className="flex flex-col items-center text-center justify-center h-screen">
       <Logo size={4} />
       <h1 className="mt-8 text-3xl font-bold text-gray-800">404</h1>
       <h1 className="mt-8 text-3xl font-bold text-gray-800">Page Not Found</h1>

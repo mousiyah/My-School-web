@@ -82,9 +82,10 @@ const DiaryDatePicker: React.FC<DiaryDatePickerProps> = ({
                     <IoIosArrowBack />
                 </button>
 
-                <div className="flex cursor-pointer justify-center items-center relative w-fit lg:w-96 mx-2 btn-white w-96">
-                    <button className="lg:hidden">{selectedDate.toLocaleDateString()}</button>
-                    <button className="hidden lg:block">{getWeekRange(selectedDate)}</button>
+                <button onClick={toggleDatePicker}
+                        className="flex cursor-pointer justify-center items-center relative w-fit lg:w-96 mx-2 btn-white w-96">
+                    <div className="lg:hidden">{selectedDate.toLocaleDateString()}</div>
+                    <div className="hidden lg:block">{getWeekRange(selectedDate)}</div>
                     {isDatePickerOpen && (
                         <div className="absolute top-full inset-0 z-50 mt-2" ref={datePickerRef}>
                             <DatePicker
@@ -93,10 +94,11 @@ const DiaryDatePicker: React.FC<DiaryDatePickerProps> = ({
                                 className="text-center border border-gray-300 p-1 mx-2 rounded"
                                 dateFormat="MMMM d"
                                 locale="en-GB"
-                                open={isDatePickerOpen}/>
+                                open={isDatePickerOpen}
+                                inline/>
                         </div>
                     )}
-                </div>
+                </button>
 
                 {/* Small and medium screens */}
                 <button className="lg:hidden cursor-pointer" onClick={handleNextDay}>
