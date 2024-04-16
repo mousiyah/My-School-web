@@ -4,6 +4,8 @@ module.exports = {
     setHomeworkCompleted,
     getUpcomingHomeworks,
     getStudentHomework,
+    updateHomework,
+    updateClasswork,
 }
 
 async function setHomeworkCompleted(student, homeworkId, isCompleted) {
@@ -68,14 +70,78 @@ async function getStudentHomework(studentId, homeworkId) {
   }
 }
 
-async function getHomeworkByLessonId(lessonId) {
-  try {
-    const homework = await db.homework.findOne({
-      where: { lessonId: lessonId },
+async function updateHomework(lesson, homeworkData) {
+  if (!homeworkData) {
+    await deleteHomework(lesson);
+    return;
+  }
+
+  let lessonHomework = await lesson.getHomework();
+  if (lessonHomework) {
+    await lessonHomework.update({
+      name: homeworkData.name,
+      description: homeworkData.description,
+      isSubmittable: homeworkData.isSubmittable,
     });
-    return homework;
-  } catch (error) {
-    throw new Error('Failed to fetch homework');
+  } else {
+    lessonHomework = await db.homework.create({
+      lessonId: lesson.id,
+      name: homeworkData.name,
+      description: homeworkData.description,
+      isSubmittable: homeworkData.isSubmittable,
+    });
+
+    await lesson.setHomework(lessonHomework);
+
+    const lessonGroup = await lesson.getGroup();
+    if (lessonGroup) {
+      const newLessonHomework = await lesson.getHomework();
+      await createStudentHomeworkRecords(newLessonHomework, lessonGroup);
+    }
+
   }
 }
 
+async function deleteHomework(lesson) {
+  const lessonHomework = await lesson.getHomework();
+  if (lessonHomework) {
+    await lessonHomework.destroy();
+  }
+}
+
+async function createStudentHomeworkRecords(lessonHomework, lessonGroup) {
+    if (lessonGroup) {
+      const groupStudents = await lessonGroup.getStudents();
+      await lessonHomework.setStudents(groupStudents, { through: { completed: false } });
+    }
+}
+
+async function updateClasswork(lesson, classworkData) {
+  if (!classworkData) {
+    await deleteClasswork(lesson);
+    return;
+  }
+
+  let lessonClasswork = await lesson.getClasswork();
+  if (lessonClasswork) {
+    await lessonClasswork.update({
+      name: classworkData.name,
+      description: classworkData.description,
+    });
+  } else {
+    lessonClasswork = await db.classwork.create({
+      lessonId: lesson.id,
+      name: classworkData.name,
+      description: classworkData.description,
+    });
+
+    await lesson.setClasswork(lessonClasswork);
+  }
+}
+
+async function deleteClasswork(lesson) {
+  const lessonClasswork = await lesson.getClasswork();
+  if (lessonClasswork) {
+    await lessonClasswork.destroy();
+  }
+}

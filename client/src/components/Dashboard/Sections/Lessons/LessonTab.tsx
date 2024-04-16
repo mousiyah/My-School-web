@@ -9,7 +9,7 @@ interface LessonTabProps {
 
 const LessonTab: React.FC<LessonTabProps> = ({ tabs, selectedTab, onTabSelect }) => {
   return (
-    <div className="w-full border-b border-b-1 px-10 bg-white sticky top-0 z-20">
+    <div className="w-full border-b border-b-1 px-10 bg-white sticky top-0 z-10">
       {tabs.map((tab) => (
         <LessonTabBtn
           key={tab.id}

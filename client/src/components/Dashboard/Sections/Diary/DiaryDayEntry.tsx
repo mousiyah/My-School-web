@@ -7,6 +7,8 @@ import { RootState } from 'store';
 import { useNavigate } from 'hooks/useNavigate';
 
 import { Tooltip } from 'react-tooltip'
+import { MARKS_COLOR_MAP } from 'constants/colors';
+import { LESSON_TIME_MAP } from 'constants/time';
 
 import { PiNotebook } from "react-icons/pi";
 import { CiEdit } from "react-icons/ci";
@@ -47,24 +49,7 @@ const DiaryDayEntry: React.FC<DiaryEntryProps> = ({ entry }) => {
 
   const userRole = useSelector((state: RootState) => state.user.role);
 
-  const colorMap = {
-    5: 'bg-green-600',
-    4: 'bg-orange-500',
-    3: 'bg-yellow-400',
-    2: 'bg-red-500',
-  };
-
-  const timeMap = {
-    1: '8:00-8:45',
-    2: '8:50-9:35',
-    3: '9:40-10:25',
-    4: '10:40-11:25',
-    5: '11:30-12:15',
-    6: '12:20-13:05',
-    7: '13:15-14:00',
-  };
-
-  const [isHomeworkChecked, setIsHomeworkChecked] = useState(homework.completed);
+  const [isHomeworkChecked, setIsHomeworkChecked] = useState(homework? homework.completed: null);
 
   const homeworkCheckboxToggle = async () => {
     setIsHomeworkChecked(!isHomeworkChecked);
@@ -95,7 +80,7 @@ const DiaryDayEntry: React.FC<DiaryEntryProps> = ({ entry }) => {
           <span className="text-xs font-semibold">{order}. </span>
           <span className="text-xs font-semibold cursor-pointer hover:underline">{subject.name}</span>
           <div className="text-xxs text-gray-500">
-            <span>{timeMap[order]}</span> <br/>
+            <span>{LESSON_TIME_MAP[order]}</span> <br/>
 
             {/* Teacher/Group */}
             {userRole == USER_ROLES.STUDENT ? (
@@ -129,7 +114,7 @@ const DiaryDayEntry: React.FC<DiaryEntryProps> = ({ entry }) => {
             <button
               className={`px-1.5 py-0.5 mr-1 max-w-min max-h-min h-fit rounded flex 
                           items-center justify-center text-white font-semibold 
-                          ${colorMap[mark.value]}`}
+                          ${MARKS_COLOR_MAP[mark.value]}`}
               data-tooltip-id="tooltip"
               data-tooltip-content={getMarkTooltipText(mark)}
               data-tooltip-place="top">
@@ -145,7 +130,7 @@ const DiaryDayEntry: React.FC<DiaryEntryProps> = ({ entry }) => {
           <Tooltip id="tooltip" />
           <button onClick={onEditButtonClick}
             className={`px-1.5 py-0.5 mr-1 max-w-min max-h-min h-fit rounded flex 
-                        items-center justify-center font-semibold `}
+                        items-center justify-center font-semibold hover:text-accent `}
             data-tooltip-id="tooltip"
             data-tooltip-content="Edit this lesson"
             data-tooltip-place="top">

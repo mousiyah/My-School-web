@@ -3,11 +3,14 @@ import { WidthProvider, Responsive } from 'react-grid-layout';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
 import { subjectApi as subjectApi} from 'api/routes';
+import Loading from 'components/common/Loading';
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
+interface subject { id: number; name: string; teacher: string };
+
 const Subjects: React.FC = () => {
-  const [subjectsList, setSubjectsList] = useState<{ id: number; name: string; teacher: string }[]>([]);
+  const [subjectsList, setSubjectsList] = useState<subject[]>([]);
 
   useEffect(() => {
     fetchSubjectList();
@@ -47,7 +50,7 @@ const Subjects: React.FC = () => {
         isDraggable={true}
         isResizable={false}
       >
-        {subjectsList.map((subject, index) => (
+        {subjectsList.length != 0 ? ( subjectsList.map((subject, index) => (
           <div key={index} className="card hover:shadow-lg cursor-pointer mb-6 sm:m-0">
             <div style={{ backgroundColor: getRandomPastelColor() }} className="p-4 rounded-t-md">
               <span className="text-base font-medium text-white">{subject.name}</span>
@@ -61,7 +64,8 @@ const Subjects: React.FC = () => {
               <span className="text-xs">Average grade: 58%</span>
             </div>
           </div>
-        ))}
+        ))) : <Loading/>}
+        
       </ResponsiveReactGridLayout>
     </div>
   );

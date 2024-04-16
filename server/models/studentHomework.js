@@ -9,7 +9,8 @@ module.exports = (sequelize, DataTypes) => {
   studentHomework.init({
     completed: {
       type: DataTypes.BOOLEAN,
-      allowNull: false
+      allowNull: false,
+      defaultValue: false,
     }
   }, {
     sequelize,

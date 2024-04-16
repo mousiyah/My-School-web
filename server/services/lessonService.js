@@ -1,9 +1,11 @@
 const db = require('../models');
+const homeworkService = require('./homeworkService');
 
 module.exports = {
   getTeacherLesson,
   getLessonsForDayByGroupId,
   getLessonsForDayByTeacherId,
+  saveLesson,
 }
 
 async function getTeacherLesson(teacher, lessonId) {
@@ -27,6 +29,7 @@ async function getTeacherLesson(teacher, lessonId) {
     const lessonClasswork = await lesson.getClasswork();
 
     const response = {
+      id: lesson.id,
       date: lesson.date,
       order: lesson.order,
       subject: {
@@ -58,6 +61,22 @@ async function getTeacherLesson(teacher, lessonId) {
     return response;
   } catch (error) {
     throw new Error('Failed to fetch lesson: ' + error.message);
+  }
+}
+
+async function saveLesson(lessonData) {
+  try {
+    const lesson = await db.lesson.findByPk(lessonData.id);
+    if (!lesson) {
+      throw new Error('Lesson not found');
+    }
+
+    await homeworkService.updateHomework(lesson, lessonData.homework);
+    await homeworkService.updateClasswork(lesson, lessonData.classwork);
+
+    return { success: true, message: 'Lesson updated successfully' };
+  } catch (error) {
+    throw new Error('Failed to save lesson: ' + error.message);
   }
 }
 

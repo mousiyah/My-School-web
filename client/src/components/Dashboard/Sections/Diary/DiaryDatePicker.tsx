@@ -83,8 +83,8 @@ const DiaryDatePicker: React.FC<DiaryDatePickerProps> = ({
                 </button>
 
                 <div className="flex cursor-pointer justify-center items-center relative w-fit lg:w-96 mx-2 btn-white w-96">
-                    <div className="lg:hidden">{selectedDate.toLocaleDateString()}</div>
-                    <div className="hidden lg:block">{getWeekRange(selectedDate)}</div>
+                    <button className="lg:hidden">{selectedDate.toLocaleDateString()}</button>
+                    <button className="hidden lg:block">{getWeekRange(selectedDate)}</button>
                     {isDatePickerOpen && (
                         <div className="absolute top-full inset-0 z-50 mt-2" ref={datePickerRef}>
                             <DatePicker

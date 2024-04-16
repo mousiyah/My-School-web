@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { homeworkApi, subjectApi } from 'api/routes';
+import Loading from 'components/common/Loading';
+
+interface homework { id: number; name: string; subject: string; due: Date; completed: boolean};
 
 const Homeworks: React.FC = () => {
   const [subjectsList, setSubjectsList] = useState<{ id: number; name: string }[]>([]);
-  const [homeworks, setHomeworks] = useState<{ id: number; name: string; subject: string; due: Date; completed: boolean}[]>([]);
+  const [homeworks, setHomeworks] = useState<homework[]>([]);
   const [showUpcoming, setShowUpcoming] = useState(true);
   const [showPast, setShowPast] = useState(false);
 
@@ -30,7 +33,7 @@ const Homeworks: React.FC = () => {
   };
 
   return (
-    <div className="flex w-full flex-col items-center py-10 px-10">
+    <div className="flex w-full h-full flex-col items-center py-10 px-10">
 
       <select defaultValue={0} className="select select-bordered border w-full max-w-xs">
         <option>All subjects</option>
@@ -39,13 +42,14 @@ const Homeworks: React.FC = () => {
         ))}
       </select>
 
-      <div className="w-full mt-4 md:px-10">
+      <div className="w-full h-full mt-4 md:px-10">
 
         <span className="ml-2" onClick={() => setShowUpcoming(!showUpcoming)}>Upcoming homeworks: </span>
 
         {showUpcoming && (
-          <div>
-            {homeworks.map((homework, index) => (
+          <div className="w-full h-full">
+           
+            {homeworks.length != 0 ? (homeworks.map((homework, index) => (
               <div key={index}  className="card p-4 hover:shadow-lg cursor-pointer mt-4 flex-row">
                 <input
                   type="checkbox"
@@ -59,8 +63,9 @@ const Homeworks: React.FC = () => {
                   <span className="text-xs text-gray-500">Due by: {homework.due.toString()}</span>
                 </div>
               </div>
-            ))}
+            ))) : <Loading/> }
           </div>
+
         )}
 
       </div>

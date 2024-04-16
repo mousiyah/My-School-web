@@ -2,11 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { lessonApi } from 'api/routes';
 
+import Loading from 'components/common/Loading';
 import LessonEditClasswork from './LessonEditClasswork';
 import LessonEditHomework from './LessonEditHomework';
+import LessonData from './LessonData';
 
 interface Lesson {
-  date: Date;
+  id: number;
+  date: string;
   order: number;
   subject: {
     id: number,
@@ -17,33 +20,73 @@ interface Lesson {
     name: string
   };
   room: string;
-  homework: {
-    id: number,
-    name: string,
-    description: string,
-    isSubmittable: boolean
-  };
-  classwork: {
-    id: number,
-    name: string,
-    description: string,
-  };
+  homework: Homework;
+  classwork: Classwork;
+}
+
+interface Classwork {
+  id: number;
+  name: string;
+  description: string;
+}
+
+interface Homework {
+  id: number;
+  name: string;
+  description: string;
+  isSubmittable: boolean;
 }
 
 const LessonEdit: React.FC = () => {
   const { lessonId } = useParams<{ lessonId: string }>();
-  const [lesson, setLesson] = useState<Lesson | null>(null);
+  const [lesson, setLesson] = useState<Lesson>();
+  const [homework, setHomework] = useState<Homework>();
+  const [classwork, setClasswork] = useState<Classwork>();
+
+  const fetchLesson = async () => {
+    try {
+      const lessonData = await lessonApi.getLesson(lessonId);
+  
+      // Create empty homework if not present
+      const lessonHomework = lessonData.homework ? lessonData.homework : 
+      { id: null, name: "", description: "", isSubmittable: false };
+
+      // Create empty classwork if not present
+      const lessonClasswork = lessonData.classwork ? lessonData.classwork : 
+      { id: null, name: "", description: "" };
+  
+      setLesson(lessonData);
+      setHomework(lessonHomework);
+      setClasswork(lessonClasswork);
+      
+    } catch (error) {
+      // Handle error
+      console.error(error);
+    }
+  };
+
+  const saveLesson = async () => {
+    try {
+
+      const updatedHomework = homework && homework.name != "" ? homework : null;
+      const updatedClasswork = classwork && classwork.name != "" ? classwork : null;
+  
+      // Update lesson with new homework and classwork
+      const updatedLesson: Lesson = {
+        ...lesson,
+        homework: updatedHomework,
+        classwork: updatedClasswork
+      };
+
+      const response = await lessonApi.saveLesson(updatedLesson);
+      console.log(response)
+    } catch (error) {
+      // Handle error
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
-    const fetchLesson = async () => {
-      try {
-        const lessonData = await lessonApi.getLesson(lessonId);
-        setLesson(lessonData);
-      } catch (error) {
-        // Handle error
-        console.error(error);
-      }
-    };
     fetchLesson();
   }, [lessonId]);
 
@@ -51,22 +94,29 @@ const LessonEdit: React.FC = () => {
     <div className="w-full h-full p-10">
       
       {/* Lesson details */}
-      <p>Date</p>
-      <p>Time: </p>
-      <p>Room: </p>
-      <p>Group: </p>
-      <p>Subject name</p>
+      {lesson ? (
+        <LessonData lesson={lesson} />
+      ) : (
+        <Loading/>
+      )}
 
       {/* Classwork section */}
-      <LessonEditClasswork/>
-
+      {classwork ? (
+        <LessonEditClasswork classwork={classwork} setClasswork={setClasswork} />
+      ) : (
+        <Loading/>
+      )}
 
       {/* Homework section */}
-      <LessonEditHomework/>
+      {homework ? (
+        <LessonEditHomework homework={homework} setHomework={setHomework}/>
+      ) : (
+        <Loading/>
+      )}
 
       {/* Button to save changes */}
       <div className="mt-5">
-        <button className="btn btn-primary text-white">Save changes</button>
+        <button onClick={saveLesson} className="btn btn-primary text-white">Save changes</button>
       </div>
 
     </div>

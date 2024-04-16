@@ -1,84 +1,70 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
-import InputWithIcon from 'components/common/InputWithIcon';
 
-import { PiNotebook } from "react-icons/pi";
+import { HOMEWORK_NAME_CHAR_COUNT } from 'constants/numbers';
+import { HOMEWORK_DESCRIPTION_CHAR_COUNT } from 'constants/numbers';
 
-const LessonEditHomework: React.FC = () => {
-  const [homeworkName, setHomeworkName] = useState("");
-  const [homeworkDescription, setHomeworkDescription] = useState("");
-  const [homeworkSubmittable, setHomeworkSubmittable] = useState(false);
-  const [isHomeworkSectionOpen, setHomeworkSectionOpen] = useState(true);
+import { InputBox } from 'components/common/InputBoxCharCount';
+import { TextArea } from 'components/common/TextAreaCharCount';
+import { FileSelector } from 'components/common/FileSelector';
 
-  const handleHomeworkFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = e.target.files && e.target.files[0];
-    console.log(selectedFile);
-  };
+interface Homework {
+    id: number;
+    name: string;
+    description: string;
+    isSubmittable: boolean;
+}
 
-  return (
-    <div tabIndex={0} className="collapse collapse-arrow border border-base-300 bg-gray-100 mt-5">
-        <input type="checkbox"
-            checked={isHomeworkSectionOpen}
-            onChange={(e) => setHomeworkSectionOpen(!isHomeworkSectionOpen)}/>
-        <div className="collapse-title text-xl font-medium">Homework</div>
-        <div className="collapse-content"> 
+interface Props {
+    homework: Homework;
+    setHomework: React.Dispatch<React.SetStateAction<Homework>>;
+}
 
-            <label className="form-control w-full max-w-xs mt-5">
-                <div className="label">
-                <span className="label-text">Homework name</span>
-                </div>
-                <input 
-                value={homeworkName}
-                onChange={(e) => setHomeworkName(e.target.value)}
-                type="text" 
-                placeholder="Homework name" 
-                className="input input-md input-bordered w-full max-w-xs"
+const LessonEditHomework: React.FC<Props> = ({ homework, setHomework }) => {
+    const [isHomeworkSectionOpen, setHomeworkSectionOpen] = useState(true);
+
+    return (
+        <div tabIndex={0} className="collapse collapse-arrow border border-base-300 mt-5">
+            <input type="checkbox"
+                checked={isHomeworkSectionOpen}
+                onChange={() => setHomeworkSectionOpen(!isHomeworkSectionOpen)} />
+            <div className="collapse-title text-xl font-medium">Homework</div>
+            <div className="collapse-content">
+
+                <InputBox
+                    label="Homework name"
+                    value={homework.name}
+                    onChange={(name) => setHomework(prevHomework => ({ ...prevHomework, name }))}
+                    placeholder="Homework name"
+                    charCount={HOMEWORK_NAME_CHAR_COUNT}
                 />
-                <div className="label">
-                <span className="label-text-alt">6 words</span>
-                </div>
-            </label>
 
-            <label className="form-control mt-5">
-                <div className="label">
-                <span className="label-text">Homework description</span>
-                </div>
-                <textarea 
-                value={homeworkDescription}
-                onChange={(e) => setHomeworkDescription(e.target.value)}
-                placeholder="Homework Description"
-                className="textarea textarea-bordered h-24"
-                ></textarea>
-                <div className="label">
-                <span className="label-text-alt">500 words</span>
-                </div>
-            </label>
-
-            <label className="form-control w-full max-w-xs mt-5">
-                <div className="label">
-                <span className="label-text">Upload a file for homework</span>
-                </div>
-                <input 
-                onChange={handleHomeworkFileChange}
-                type="file"
-                className="file-input file-input-md file-input-bordered w-full max-w-xs" 
+                <TextArea
+                    label="Homework description"
+                    value={homework.description}
+                    onChange={(description) => setHomework(prevHomework => ({ ...prevHomework, description }))}
+                    placeholder="Homework Description"
+                    charCount={HOMEWORK_DESCRIPTION_CHAR_COUNT}
                 />
-            </label>
 
-            <div className="form-control w-fit mt-5">
-                <label className="label cursor-pointer">
-                <p className="label-text mr-2">Is homework submittable?</p> 
-                <input 
-                    checked={homeworkSubmittable}
-                    onChange={(e) => setHomeworkSubmittable(e.target.checked)}
-                    type="checkbox"
-                    className="toggle"
+                <FileSelector
+                    label="Upload a file for homework"
+                    onChange={(file) => console.log(file)}
                 />
-                </label>
+
+                <div className="form-control w-fit mt-5">
+                    <label className="label cursor-pointer">
+                        <p className="label-text mr-2">Is homework submittable?</p>
+                        <input
+                            checked={homework.isSubmittable}
+                            onChange={(e) => setHomework(prevHomework => ({ ...prevHomework, isSubmittable: e.target.checked }))}
+                            type="checkbox"
+                            className="toggle"
+                        />
+                    </label>
+                </div>
             </div>
         </div>
-    </div>
-  );
+    );
 };
 
 export default LessonEditHomework;

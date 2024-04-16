@@ -11,5 +11,6 @@ router.post('/homework/set-completed', authenticateToken, controller.setHomework
 router.get('/homework/upcoming', authenticateToken, controller.getUpcomingHomeworks);
 
 router.get('/lesson', authenticateToken, controller.getLesson);
+router.post('/lesson/save', authenticateToken, controller.saveLesson);
 
 module.exports = router;

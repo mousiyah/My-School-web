@@ -48,7 +48,7 @@ const ProfileBtn: React.FC<ProfileBtnProps> = ({ dropdownItems }) => {
 </button>
 
       {isDropdownOpen && (
-        <div className="absolute top-full right-0 z-10 mt-2 p-0 bg-white rounded-lg shadow text-gray-600">
+        <div className="absolute top-full right-0 z-10 mt-2 p-0 bg-white rounded-lg shadow text-gray-600 z-20">
           {dropdownItems.map((item, index) => (
             <button
               key={index}
