@@ -1,43 +1,44 @@
-'use strict';
-const { Model } = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class classwork extends Model {
     static associate(models) {
-
       classwork.belongsTo(models.lesson, {
         foreignKey: {
-          name: 'lessonId',
+          name: "lessonId",
           allowNull: false,
-          onUpdate: 'CASCADE',
-          onDelete: 'CASCADE',
-        }
-      });
-
-      classwork.hasOne(models.mark, {
-        foreignKey: {
-          name: 'relatedId',
-          allowNull: true,
-          constraints: false,
-          onUpdate: 'CASCADE',
-          onDelete: 'CASCADE',
+          onUpdate: "CASCADE",
+          onDelete: "CASCADE",
         },
       });
 
+      classwork.hasMany(models.mark, {
+        foreignKey: {
+          name: "relatedId",
+          allowNull: true,
+          constraints: false,
+          onUpdate: "CASCADE",
+          onDelete: "CASCADE",
+        },
+      });
     }
   }
-  classwork.init({
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false
+  classwork.init(
+    {
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      description: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+      },
     },
-    description: {
-      type: DataTypes.TEXT,
-      allowNull: true
+    {
+      sequelize,
+      timestamps: true,
+      modelName: "classwork",
     }
-  }, {
-    sequelize,
-    timestamps: true,
-    modelName: 'classwork',
-  });
+  );
   return classwork;
 };

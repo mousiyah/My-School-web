@@ -15,11 +15,15 @@ module.exports = (sequelize, DataTypes) => {
 
       mark.belongsTo(models.lesson, {
         foreignKey: {
-          name: 'lessonId',
-          allowNull: false,
+          name: 'relatedId',
+          allowNull: true,
+          constraints: false,
           onUpdate: 'CASCADE',
           onDelete: 'CASCADE',
-        }
+        },
+        scope: {
+          relatedType: 'lesson',
+        },
       });
 
       mark.belongsTo(models.homework, {
@@ -57,11 +61,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     relatedId: {
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: false,
     },
     relatedType: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
     }
   }, {
     sequelize,

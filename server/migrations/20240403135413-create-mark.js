@@ -16,24 +16,17 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
       },
-      lessonId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: { model: 'lessons', key: 'id' },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
-      },
       value: {
         type: Sequelize.INTEGER,
         allowNull: false
       },
       relatedId: {
         type: Sequelize.INTEGER,
-        allowNull: true
+        allowNull: false
       },
       relatedType: {
         type: Sequelize.STRING,
-        allowNull: true
+        allowNull: false
       },
       createdAt: {
         allowNull: false,

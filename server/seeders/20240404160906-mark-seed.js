@@ -1,5 +1,5 @@
-const { lesson, mark, homework, classwork } = require('../models');
-const faker = require('faker');
+const { lesson } = require("../models");
+const faker = require("faker");
 
 const getRandomMark = () => {
   return faker.datatype.number({ min: 2, max: 5 });
@@ -15,65 +15,50 @@ module.exports = {
     const marksData = [];
 
     for (const lesson of lessons) {
+      const group = await lesson.getGroup();
+      const students = await group.getStudents();
 
-        const group = await lesson.getGroup();
-        const students = await group.getStudents();
-      
+      const homework = await lesson.getHomework();
+      const classwork = await lesson.getClasswork();
+
       for (const student of students) {
         if (Math.random() < 0.5) {
           marksData.push({
             studentId: student.id,
-            lessonId: lesson.id,
             value: getRandomMark(),
-            relatedType: null,
-            relatedId: null,
+            relatedType: "lesson",
+            relatedId: lesson.id,
             createdAt: new Date(),
-            updatedAt: new Date()
+            updatedAt: new Date(),
           });
         }
-      }
 
-      if (Math.random() < 0.5) {
-        const associatedHomework = await lesson.getHomework();
-        const associatedClasswork = await lesson.getClasswork();
-
-        if (associatedHomework || associatedClasswork) {
-          let relatedType = null;
-          let relatedId = null;
-
-          if (associatedHomework && associatedClasswork) {
-            const randomElement = getRandomElement(['homework', 'classwork']);
-            relatedType = randomElement;
-            relatedId = randomElement === 'homework' ? associatedHomework.id : associatedClasswork.id;
-          } else if (associatedHomework) {
-            relatedType = 'homework';
-            relatedId = associatedHomework.id;
-          } else if (associatedClasswork) {
-            relatedType = 'classwork';
-            relatedId = associatedClasswork.id;
-          }
-
-          for (const student of students) {
-            if (Math.random() < 0.5) {
-              marksData.push({
-                studentId: student.id,
-                lessonId: lesson.id,
-                value: getRandomMark(),
-                relatedType: relatedType,
-                relatedId: relatedId,
-                createdAt: new Date(),
-                updatedAt: new Date()
-              });
-            }
-          }
+        if (homework && Math.random() < 0.5) {
+          marksData.push({
+            studentId: student.id,
+            value: getRandomMark(),
+            relatedType: "homework",
+            relatedId: homework.id,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          });
+        } else if (classwork) {
+          marksData.push({
+            studentId: student.id,
+            value: getRandomMark(),
+            relatedType: "classwork",
+            relatedId: classwork.id,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          });
         }
       }
     }
 
-    await queryInterface.bulkInsert('marks', marksData, {});
+    await queryInterface.bulkInsert("marks", marksData, {});
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.bulkDelete('marks', null, {});
-  }
+    await queryInterface.bulkDelete("marks", null, {});
+  },
 };

@@ -1,17 +1,19 @@
-const db = require('../models');
-const homeworkService = require('./homeworkService');
+const { getLessonGroup } = require("../controllers/controller");
+const db = require("../models");
+const homeworkService = require("./homeworkService");
 
 module.exports = {
   getTeacherLesson,
   getLessonsForDayByGroupId,
   getLessonsForDayByTeacherId,
   saveLesson,
-}
+  getLessonGroup,
+};
 
 async function getLessonById(lessonId) {
   const lesson = await db.lesson.findByPk(lessonId);
   if (!lesson) {
-    throw new Error('Lesson not found');
+    throw new Error("Lesson not found");
   }
   return lesson;
 }
@@ -19,7 +21,7 @@ async function getLessonById(lessonId) {
 async function isLessonTeacher(lesson, teacher) {
   const lessonTeacher = await lesson.getTeacher();
   if (!lessonTeacher || lessonTeacher.id !== teacher.id) {
-    throw new Error('Not authorized');
+    throw new Error("Not authorized");
   }
 }
 
@@ -70,7 +72,7 @@ async function getTeacherLesson(teacher, lessonId) {
     const lessonData = await getLessonData(lesson);
     return lessonData;
   } catch (error) {
-    throw new Error('Failed to fetch lesson: ' + error.message);
+    throw new Error("Failed to fetch lesson: " + error.message);
   }
 }
 
@@ -81,34 +83,32 @@ async function saveLesson(lessonData) {
     await homeworkService.updateHomework(lesson, lessonData.homework);
     await homeworkService.updateClasswork(lesson, lessonData.classwork);
 
-    return { success: true, message: 'Lesson updated successfully' };
+    return { success: true, message: "Lesson updated successfully" };
   } catch (error) {
-    throw new Error('Failed to save lesson: ' + error.message);
+    throw new Error("Failed to save lesson: " + error.message);
   }
 }
 
-
 async function getLessonsForDayByGroupId(groupId, date) {
-    try {
-      const lessons = await db.lesson.findAll({
-        where: {
-          groupId: groupId,
-          date: date
-        },
-        order: [['order', 'ASC']],
-        include: [
-          { model: db.subject },
-          { model: db.teacher, include: [db.user] },
-          { model: db.room },
-          { model: db.homework },
-          { model: db.classwork },
-          { model: db.mark }
-        ],
-      });
-      return lessons;
-    } catch (error) {
-      throw new Error('Failed to fetch lessons' + error);
-    }
+  try {
+    const lessons = await db.lesson.findAll({
+      where: {
+        groupId: groupId,
+        date: date,
+      },
+      order: [["order", "ASC"]],
+      include: [
+        { model: db.subject },
+        { model: db.teacher, include: [db.user] },
+        { model: db.room },
+        { model: db.homework },
+        { model: db.classwork },
+      ],
+    });
+    return lessons;
+  } catch (error) {
+    throw new Error("Failed to fetch lessons" + error);
+  }
 }
 
 async function getLessonsForDayByTeacherId(teacherId, date) {
@@ -116,9 +116,9 @@ async function getLessonsForDayByTeacherId(teacherId, date) {
     const lessons = await db.lesson.findAll({
       where: {
         teacherId: teacherId,
-        date: date
+        date: date,
       },
-      order: [['order', 'ASC']],
+      order: [["order", "ASC"]],
       include: [
         { model: db.subject },
         { model: db.group },
@@ -129,6 +129,18 @@ async function getLessonsForDayByTeacherId(teacherId, date) {
     });
     return lessons;
   } catch (error) {
-    throw new Error('Failed to fetch lessons' + error);
+    throw new Error("Failed to fetch lessons" + error);
+  }
+}
+
+async function getLessonGroup(teacher, lessonId) {
+  try {
+    const lesson = await getLessonById(lessonId);
+    const group = await lesson.getGroup();
+    const students = await group.getStudents();
+
+    return lessons;
+  } catch (error) {
+    throw new Error("Failed to fetch Group data" + error);
   }
 }
