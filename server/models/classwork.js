@@ -13,6 +13,16 @@ module.exports = (sequelize, DataTypes) => {
         }
       });
 
+      classwork.hasOne(models.mark, {
+        foreignKey: {
+          name: 'relatedId',
+          allowNull: true,
+          constraints: false,
+          onUpdate: 'CASCADE',
+          onDelete: 'CASCADE',
+        },
+      });
+
     }
   }
   classwork.init({

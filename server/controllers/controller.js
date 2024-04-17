@@ -11,7 +11,6 @@ async function getDiaryDay(req, res) {
     const userId = req.userId;
     const userRole = req.userRole;
     const { date } = req.query;
-
     let diaryDay;
 
     switch (userRole) {
@@ -35,13 +34,14 @@ async function getDiaryDay(req, res) {
 async function setHomeworkCompleted(req, res) {
   try {
     const userId = req.userId;
+    const userRole = req.userRole;
     const { homeworkId, isCompleted } = req.body;
 
     switch (userRole) {
       case TEACHER_ROLE:
         throw new Error('Not Authorized:')
       case STUDENT_ROLE:
-        const student = roleService.getStudentByUserId(userId);
+        const student = await roleService.getStudentByUserId(userId);
         await homeworkService.setHomeworkCompleted(student, homeworkId, isCompleted);
         break;
     }
@@ -141,6 +141,28 @@ async function saveLesson(req, res) {
   }
 }
 
+async function getLessonGroup(req, res) {
+  try {
+    const userId = req.userId;
+    const userRole = req.userRole;
+    const {lessonId} = req.query;
+
+    let lessonGroup;
+    switch (userRole) {
+      case STUDENT_ROLE:
+        throw new Error('Not Authorized:')
+      case TEACHER_ROLE:
+        const teacher = await roleService.getTeacherByUserId(userId);
+        lessonGroup = await lessonService.getLessonGroup(teacher, lessonId);
+        break;
+    }
+
+    res.status(200).json(lessonGroup);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
 module.exports = {
   getDiaryDay,
   setHomeworkCompleted,
@@ -148,4 +170,5 @@ module.exports = {
   getUpcomingHomeworks,
   getLesson,
   saveLesson,
+  getLessonGroup,
 };

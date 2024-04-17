@@ -1,6 +1,5 @@
 import React, { useState, useRef } from 'react';
 import DatePicker from 'react-datepicker';
-import { useClickOutside } from 'hooks/useClickOutside';
 import 'react-datepicker/dist/react-datepicker.css';
 
 import { enGB } from 'date-fns/locale/en-GB';

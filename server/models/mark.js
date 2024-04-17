@@ -27,6 +27,8 @@ module.exports = (sequelize, DataTypes) => {
           name: 'relatedId',
           allowNull: true,
           constraints: false,
+          onUpdate: 'CASCADE',
+          onDelete: 'CASCADE',
         },
         scope: {
           relatedType: 'homework',
@@ -38,6 +40,8 @@ module.exports = (sequelize, DataTypes) => {
           name: 'relatedId',
           allowNull: true,
           constraints: false,
+          onUpdate: 'CASCADE',
+          onDelete: 'CASCADE',
         },
         scope: {
           relatedType: 'classwork',

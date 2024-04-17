@@ -3,8 +3,8 @@ import { useNavigate } from 'hooks/useNavigate';
 import { Outlet, useLocation } from 'react-router-dom';
 import { useWindowSize } from 'react-use';
 
-import Topbar from './TopBar/Topbar';
-import Sidebar from './Sidebar/Sidebar';
+import Topbar from './topBar/Topbar';
+import Sidebar from './sidebar/Sidebar';
 
 const Dashboard: React.FC = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);

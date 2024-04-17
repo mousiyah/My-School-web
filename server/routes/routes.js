@@ -12,5 +12,6 @@ router.get('/homework/upcoming', authenticateToken, controller.getUpcomingHomewo
 
 router.get('/lesson', authenticateToken, controller.getLesson);
 router.post('/lesson/save', authenticateToken, controller.saveLesson);
+router.get('/lesson/group', authenticateToken, controller.getLessonGroup);
 
 module.exports = router;

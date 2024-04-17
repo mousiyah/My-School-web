@@ -5,7 +5,7 @@ import { lessonApi } from 'api/routes';
 import Loading from 'components/common/Loading';
 import LessonEditClasswork from './LessonEditClasswork';
 import LessonEditHomework from './LessonEditHomework';
-import LessonData from './LessonData';
+import LessonData from '../LessonDetails';
 
 interface Lesson {
   id: number;

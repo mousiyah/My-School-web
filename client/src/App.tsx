@@ -18,15 +18,14 @@ import { RootState } from 'store';
 
 import NotFound from 'components/NotFound';
 import Login from './components/Login/Login';
-import Dashboard from './components/Dashboard/Dashboard';
-import Diary from 'components/Dashboard/Sections/Diary/Diary';
-import Subjects from 'components/Dashboard/Sections/Subjects/Subjects';
-import Homeworks from 'components/Dashboard/Sections/Homeworks/Homeworks';
-import Lesson from 'components/Dashboard/Sections/Lessons/Lesson';
-import LessonEdit from 'components/Dashboard/Sections/Lessons/LessonEdit';
-import LessonStudents from 'components/Dashboard/Sections/Lessons/LessonStudents';
-import LessonDetails from 'components/Dashboard/Sections/Lessons/LessonDetails';
-import LessonMyWork from 'components/Dashboard/Sections/Lessons/LessonMyWork';
+import Dashboard from './components/dashboard/Dashboard';
+import Diary from 'components/dashboard/sections/diary/Diary';
+import Subjects from 'components/dashboard/sections/subjects/Subjects';
+import Homeworks from 'components/dashboard/sections/homeworks/Homeworks';
+import Lesson from 'components/dashboard/sections/lessons/Lesson';
+import LessonEdit from 'components/dashboard/sections/lessons/LessonEdit/LessonEdit';
+import LessonStudents from 'components/dashboard/sections/lessons/LessonStudents/LessonStudents';
+import LessonMyWork from 'components/dashboard/sections/lessons/LessonMyWork';
 
 
 const App: React.FC = () => {
@@ -97,12 +96,6 @@ const App: React.FC = () => {
           <RequireAuth fallbackPath={'/login'}>
             <LessonStudents/>
           </RequireAuth>} />)}
-
-          {roleAllowedFor(USER_ROLES.STUDENT) && (
-          <Route path="/dashboard/lesson/:lessonId/details" element={
-            <RequireAuth fallbackPath={'/login'}>
-              <LessonDetails/>
-            </RequireAuth>} />)}
 
           {roleAllowedFor(USER_ROLES.STUDENT) && (
           <Route path="/dashboard/lesson/:lessonId/my-work" element={

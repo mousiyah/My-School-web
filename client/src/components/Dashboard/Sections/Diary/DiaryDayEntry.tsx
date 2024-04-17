@@ -7,7 +7,6 @@ import { RootState } from 'store';
 import { useNavigate } from 'hooks/useNavigate';
 
 import { Tooltip } from 'react-tooltip'
-import { MARKS_COLOR_MAP } from 'constants/colors';
 import { LESSON_TIME_MAP } from 'constants/time';
 
 import { PiNotebook } from "react-icons/pi";
@@ -36,7 +35,10 @@ interface Entry {
     name: string;
     completed: boolean;
   };
-  classwork: string;
+  classwork: {
+    id: number,
+    name: string;
+  };
   marks: {
     type: string;
     value: number;
@@ -46,6 +48,13 @@ interface Entry {
 
 const DiaryDayEntry: React.FC<DiaryEntryProps> = ({ entry }) => {
   const { lessonId, order, subject, group, teacher, room, homework, classwork, marks, attended} = entry;
+
+  const MARKS_COLOR_MAP = {
+    5: 'bg-green-600',
+    4: 'bg-orange-400',
+    3: 'bg-yellow-400',
+    2: 'bg-red-600',
+  }
 
   const userRole = useSelector((state: RootState) => state.user.role);
 
@@ -59,9 +68,9 @@ const DiaryDayEntry: React.FC<DiaryEntryProps> = ({ entry }) => {
   const getMarkTooltipText = (mark) => {
     let prefix = 'Mark for ';
     if (mark.type === 'homework') {
-      return prefix + homework;
+      return prefix + homework.name;
     } else if (mark.type === 'classwork') {
-      return prefix + classwork;
+      return prefix + classwork.name;
     } else {
       return prefix + 'answer in the lesson';
     }
@@ -74,7 +83,7 @@ const DiaryDayEntry: React.FC<DiaryEntryProps> = ({ entry }) => {
   };
 
   return (
-    <div className={`px-2 py-1 ${userRole == USER_ROLES.TEACHER? '' : ''}`}>
+    <div className={`px-2 py-1`}>
       <div className="flex">
         <div className="flex-grow p-1">
           <span className="text-xs font-semibold">{order}. </span>
@@ -97,7 +106,7 @@ const DiaryDayEntry: React.FC<DiaryEntryProps> = ({ entry }) => {
           {classwork ? (
           <div className="flex items-center mt-0.5 mb-0.5">
             <PiNotebook size={14} className="text-blue-500"/>
-            <span className="text-xs ml-1">{classwork}</span>
+            <span className="text-xs ml-1">{classwork.name}</span>
           </div>
           ) : ''}
 
@@ -153,13 +162,12 @@ const DiaryDayEntry: React.FC<DiaryEntryProps> = ({ entry }) => {
       ) : ''}
 
       {/* Homework */}
-      {homework.name && (
+      {homework && (
         <div className="bg-indigo-100 py-0.5 px-1 rounded flex items-baseline cursor-pointer">
 
           {userRole === USER_ROLES.STUDENT && (
-            <div className="flex cursor-pointer" onClick={homeworkCheckboxToggle}>
+            <div className="flex cursor-pointer">
               <input
-                key={Math.random()}
                 type="checkbox"
                 id={`checkbox-${lessonId}`}
                 checked={isHomeworkChecked}

@@ -14,7 +14,7 @@ export const homeworkApi = {
     return response.data;
   },
   getUpcomingHomeworks: async () => {
-    const response = await api.get('homework/upcoming/');
+    const response = await api.get('homework/upcoming');
     console.log(response.data)
     return response.data;
   },
@@ -22,7 +22,7 @@ export const homeworkApi = {
 
 export const subjectApi = {
   getMyGroupSubjects: async () => {
-    const response = await api.get('subjects/');
+    const response = await api.get('subjects');
     console.log(response.data)
     return response.data;
   },
@@ -30,12 +30,17 @@ export const subjectApi = {
 
 export const lessonApi = {
   getLesson: async (lessonId) => {
-    const response = await api.get('lesson/', { params: { lessonId } });
+    const response = await api.get('lesson', { params: { lessonId } });
     console.log(response.data)
     return response.data;
   },
   saveLesson: async (lessonData) => {
     const response = await api.post('lesson/save', { lessonData });
+    return response.data;
+  },
+  getLessonGroupData: async (lessonId) => {
+    const response = await api.get('lesson/group', { params: { lessonId } });
+    console.log(response.data)
     return response.data;
   },
 };

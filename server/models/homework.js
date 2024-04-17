@@ -14,6 +14,15 @@ module.exports = (sequelize, DataTypes) => {
       });
 
       homework.belongsToMany(models.student, { through: 'studentHomeworks' });
+      homework.hasOne(models.mark, {
+        foreignKey: {
+          name: 'relatedId',
+          allowNull: true,
+          constraints: false,
+          onUpdate: 'CASCADE',
+          onDelete: 'CASCADE',
+        },
+      });
 
     }
   }

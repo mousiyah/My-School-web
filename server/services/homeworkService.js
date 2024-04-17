@@ -11,10 +11,10 @@ module.exports = {
 async function setHomeworkCompleted(student, homeworkId, isCompleted) {
     try {
       const homework = await db.homework.findByPk(homeworkId);
-
+      
       const studentHomework = await getStudentHomework(student.id, homework.id);
       studentHomework.completed = isCompleted;
-      console.log(isCompleted);
+      
       await studentHomework.save();
 
     } catch (error) {
@@ -104,9 +104,7 @@ async function updateHomework(lesson, homeworkData) {
 
 async function deleteHomework(lesson) {
   const lessonHomework = await lesson.getHomework();
-  if (lessonHomework) {
-    await lessonHomework.destroy();
-  }
+  await lessonHomework.destroy();
 }
 
 async function createStudentHomeworkRecords(lessonHomework, lessonGroup) {

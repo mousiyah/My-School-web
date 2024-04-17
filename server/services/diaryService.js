@@ -45,12 +45,15 @@ async function getStudentDiaryEntry(lesson, studentId) {
         },
         teacher: lesson.teacher.user.fullname,
         room: lesson.room.name,
-        homework: {
-          id:  lesson.homework ? lesson.homework.id : null,
-          name: lesson.homework ? lesson.homework.name : null,
-          completed: lesson.homework ? studentHomework.completed : null,
-        },
-        classwork: lesson.classwork ? lesson.classwork.name : null,
+        homework: lesson.homework ? {
+          id: lesson.homework.id,
+          name: lesson.homework.name,
+          completed: studentHomework.completed
+        } : null,
+        classwork: lesson.classwork ? {
+          id: lesson.classwork.id,
+          name: lesson.classwork.name,
+        } : null,
         marks: markDetails,
         attended: attendance.attended
     };
@@ -87,11 +90,15 @@ async function getTeacherDiaryEntry(lesson) {
           name: lesson.group.name,
         },
         room: lesson.room.name,
-        homework: {
-          id:  lesson.homework ? lesson.homework.id : null,
-          name: lesson.homework ? lesson.homework.name : null,
-        },
-        classwork: lesson.classwork ? lesson.classwork.name : null,
+        homework: lesson.homework ? {
+          id: lesson.homework.id,
+          name: lesson.homework.name,
+          isSubmittable: lesson.homework.isSubmittable,
+        } : null,
+        classwork: lesson.classwork ? {
+          id: lesson.classwork.id,
+          name: lesson.classwork.name 
+        }: null,
     };
 
     return diaryEntry;
