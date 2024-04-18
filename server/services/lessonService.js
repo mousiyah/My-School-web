@@ -1,4 +1,3 @@
-const { getLessonGroup } = require("../controllers/controller");
 const db = require("../models");
 const homeworkService = require("./homeworkService");
 
@@ -138,8 +137,69 @@ async function getLessonGroup(teacher, lessonId) {
     const lesson = await getLessonById(lessonId);
     const group = await lesson.getGroup();
     const students = await group.getStudents();
+    const lessonHomework = await lesson.getHomework();
+    const lessonClasswork = await lesson.getClasswork();
 
-    return lessons;
+    const lessonGroupStudents = [];
+
+    for (const student of students) {
+      const studentUser = await student.getUser();
+      const attendance = await db.attendance.findOne({
+        where: { studentId: student.id, lessonId: lesson.id },
+      });
+
+      const hwMark = lessonHomework
+        ? await db.mark.findOne({
+            where: {
+              studentId: student.id,
+              relatedId: lessonHomework.id,
+              relatedType: "homework",
+            },
+          })
+        : null;
+
+      const cwMark = lessonClasswork
+        ? await db.mark.findOne({
+            where: {
+              studentId: student.id,
+              relatedId: lessonClasswork.id,
+              relatedType: "classwork",
+            },
+          })
+        : null;
+
+      const lessonMark = await db.mark.findOne({
+        where: {
+          studentId: student.id,
+          relatedId: lesson.id,
+          relatedType: "lesson",
+        },
+      });
+
+      lessonGroupStudents.push({
+        id: student.id,
+        name: studentUser.fullname,
+        attended: attendance.attended,
+        hwSubmission: {
+          id: 0, // EDIT
+        },
+        hwMark: hwMark ? hwMark.value : null,
+        cwMark: cwMark ? cwMark.value : null,
+        lessonMark: lessonMark ? lessonMark.value : null,
+      });
+    }
+
+    const lessonGroupData = {
+      group: {
+        id: group.id,
+        name: group.name,
+      },
+      hasHomework: lessonHomework ? true : false,
+      hasClasswork: lessonClasswork ? true : false,
+      students: lessonGroupStudents,
+    };
+
+    return lessonGroupData;
   } catch (error) {
     throw new Error("Failed to fetch Group data" + error);
   }
