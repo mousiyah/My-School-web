@@ -28,7 +28,7 @@ interface Student {
 
 const LessonStudents: React.FC = () => {
   const { lessonId } = useParams<{ lessonId: string }>();
-  const [lessonGroup, setLessonGroup] = useState<LessonGroup>(null);
+  const [lessonGroup, setLessonGroup] = useState<LessonGroup>();
 
   const [totalStudents, setTotalStudents] = useState<number>(0);
   const [absentStudents, setAbsentStudents] = useState<number>(0);
@@ -44,8 +44,13 @@ const LessonStudents: React.FC = () => {
     };
 
     fetchLessonData();
-    calculateStudents();
-  }, [lessonId]);
+  }, []);
+
+  useEffect(() => {
+    if (lessonGroup) {
+      calculateStudents();
+    }
+  }, [lessonGroup]);
 
   const calculateStudents = () => {
     let total = 0;
@@ -68,7 +73,6 @@ const LessonStudents: React.FC = () => {
         }
         return student;
       });
-      calculateStudents();
       return { ...prevLessonGroup, students: updatedStudents };
     });
   };
