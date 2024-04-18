@@ -1,27 +1,24 @@
-'use strict';
-const { Model } = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class subject extends Model {
     static associate(models) {
-
-      subject.hasMany(models.lesson);
-
-      subject.belongsToMany(models.teacher, { through: 'teacherSubjects' });
-
-      subject.belongsToMany(models.group, { through: 'groupSubjects' });
-
+      subject.hasMany(models.groupSubject);
     }
   }
-  subject.init({
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
+  subject.init(
+    {
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+      },
+    },
+    {
+      sequelize,
+      timestamps: false,
+      modelName: "subject",
     }
-  }, {
-    sequelize,
-    timestamps: false,
-    modelName: 'subject',
-  });
+  );
   return subject;
 };

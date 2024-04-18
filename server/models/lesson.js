@@ -3,9 +3,9 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class lesson extends Model {
     static associate(models) {
-      lesson.belongsTo(models.subject, {
+      lesson.belongsTo(models.groupSubject, {
         foreignKey: {
-          name: "subjectId",
+          name: "groupSubjectId",
           allowNull: false,
           onUpdate: "CASCADE",
           onDelete: "CASCADE",

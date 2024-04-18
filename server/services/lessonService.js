@@ -25,7 +25,7 @@ async function isLessonTeacher(lesson, teacher) {
 }
 
 async function getLessonData(lesson) {
-  const lessonSubject = await lesson.getSubject();
+  const lessonSubject = await lesson.getGroupSubject();
   const lessonGroup = await lesson.getGroup();
   const lessonRoom = await lesson.getRoom();
   const lessonHomework = await lesson.getHomework();
@@ -97,7 +97,7 @@ async function getLessonsForDayByGroupId(groupId, date) {
       },
       order: [["order", "ASC"]],
       include: [
-        { model: db.subject },
+        { model: db.groupSubject, include: [{ model: db.subject }] },
         { model: db.teacher, include: [db.user] },
         { model: db.room },
         { model: db.homework },
@@ -119,7 +119,7 @@ async function getLessonsForDayByTeacherId(teacherId, date) {
       },
       order: [["order", "ASC"]],
       include: [
-        { model: db.subject },
+        { model: db.groupSubject, include: [{ model: db.subject }] },
         { model: db.group },
         { model: db.room },
         { model: db.homework },

@@ -64,8 +64,8 @@ async function getStudentDiaryEntry(lesson, studentId) {
       lessonId: lesson.id,
       order: lesson.order,
       subject: {
-        id: lesson.subject.id,
-        name: lesson.subject.name,
+        id: lesson.groupSubject.id,
+        name: lesson.groupSubject.subject.name,
       },
       teacher: lesson.teacher.user.fullname,
       room: lesson.room.name,
@@ -130,8 +130,8 @@ async function getTeacherDiaryEntry(lesson) {
       lessonId: lesson.id,
       order: lesson.order,
       subject: {
-        id: lesson.subject.id,
-        name: lesson.subject.name,
+        id: lesson.groupSubject.id,
+        name: lesson.groupSubject.subject.name,
       },
       group: {
         id: lesson.group.id,

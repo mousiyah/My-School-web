@@ -1,9 +1,9 @@
-const db = require('../models');
+const db = require("../models");
 
 module.exports = {
-    getStudentSubjects,
-    getGroupSubjects,
-  }
+  getStudentSubjects,
+  getGroupSubjects,
+};
 
 async function getStudentSubjects(student) {
   const groupId = await student.groupId;
@@ -16,27 +16,28 @@ async function getGroupSubjects(groupId) {
 
     const subjectsList = await group.getSubjects();
 
-    const formattedSubjects = await Promise.all(subjectsList.map(async subject => {
-      const groupSubject = await db.groupSubject.findOne({ 
-        where: { 
-          groupId: group.id,
-          subjectId: subject.id
-        }
-      });
+    const formattedSubjects = await Promise.all(
+      subjectsList.map(async (subject) => {
+        const groupSubject = await db.groupSubject.findOne({
+          where: {
+            groupId: group.id,
+            subjectId: subject.id,
+          },
+        });
 
-      const teacher = await groupSubject.getTeacher();
-      const teacherUser = await teacher.getUser();
+        const teacher = await groupSubject.getTeacher();
+        const teacherUser = await teacher.getUser();
 
-      return {
-        id: subject.id,
-        name: subject.name,
-        teacher: teacherUser.fullname,
-      };
-    }));
+        return {
+          id: subject.id,
+          name: subject.name,
+          teacher: teacherUser.fullname,
+        };
+      })
+    );
 
     return formattedSubjects;
-
   } catch (error) {
-    throw new Error('Failed to fetch group subjects');
+    throw new Error("Failed to fetch group subjects");
   }
 }
