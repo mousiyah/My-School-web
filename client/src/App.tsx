@@ -27,6 +27,7 @@ import Login from "./components/Login/Login";
 import Dashboard from "./components/dashboard/Dashboard";
 import Diary from "components/dashboard/diary/Diary";
 import Subjects from "components/dashboard/subjects/Subjects";
+import Subject from "components/dashboard/subjects/Subject";
 import Homeworks from "components/dashboard/homeworks/Homeworks";
 import Lesson from "components/dashboard/lessons/Lesson";
 import LessonEdit from "components/dashboard/lessons/LessonEdit/LessonEdit";
@@ -105,6 +106,15 @@ const App: React.FC = () => {
           element={
             <RequireAuth fallbackPath={"/login"}>
               <Subjects />
+            </RequireAuth>
+          }
+        />
+
+        <Route
+          path="/dashboard/subject/:subjectId"
+          element={
+            <RequireAuth fallbackPath={"/login"}>
+              <Subject />
             </RequireAuth>
           }
         />

@@ -29,7 +29,7 @@ async function getGroupSubjects(groupId) {
         const teacherUser = await teacher.getUser();
 
         return {
-          id: subject.id,
+          id: groupSubject.id,
           name: subject.name,
           teacher: teacherUser.fullname,
         };

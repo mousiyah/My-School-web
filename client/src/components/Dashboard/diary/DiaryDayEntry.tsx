@@ -23,23 +23,23 @@ interface Entry {
   lessonId: string;
   order: number;
   subject: {
-    id: number;
+    id: string;
     name: string;
   };
   group: {
-    id: number;
+    id: string;
     name: string;
   };
   teacher: string;
   room: string;
   homework: {
-    id: number;
+    id: string;
     name: string;
     completed: boolean;
     mark: Mark;
   };
   classwork: {
-    id: number;
+    id: string;
     name: string;
     mark: Mark;
   };

@@ -1,63 +1,69 @@
 import { useNavigate as useReactNavigate } from "react-router-dom";
 
 export const useNavigate = () => {
-    const navigate = useReactNavigate();
+  const navigate = useReactNavigate();
 
-    const navigateToLogin = () => {
-        navigate("/login", { replace: true });
-    };
+  const navigateToLogin = () => {
+    navigate("/login", { replace: true });
+  };
 
-    const navigateToDashboard = () => {
-        navigate("/dashboard", { replace: true });
-    };
+  const navigateToDashboard = () => {
+    navigate("/dashboard", { replace: true });
+  };
 
-    const navigateToDiary = () => {
-        navigate(`/dashboard/diary`);
-    };
+  const navigateToDiary = () => {
+    navigate(`/dashboard/diary`);
+  };
 
-    const navigateToHomeworks = () => {
-        navigate(`/dashboard/homeworks`);
-    };
+  const navigateToHomeworks = () => {
+    navigate(`/dashboard/homeworks`);
+  };
 
-    const navigateToSubjects = () => {
-        navigate(`/dashboard/subjects`);
-    };
+  const navigateToSubjects = () => {
+    navigate(`/dashboard/subjects`);
+  };
 
-    const navigateToAnnouncements = () => {
-        navigate(`/dashboard/announcements`);
-    };
+  const navigateToSubject = (subjectId: string) => {
+    console.log(33);
+    navigate(`/dashboard/subject/${subjectId}`);
+  };
 
-    const navigateToInbox = () => {
-        navigate(`/dashboard/inbox`);
-    };
+  const navigateToAnnouncements = () => {
+    navigate(`/dashboard/announcements`);
+  };
 
-    const navigateToLessonDetails = (lessonId: string) => {
-        navigate(`/dashboard/lesson/${lessonId}/details`);
-    };
+  const navigateToInbox = () => {
+    navigate(`/dashboard/inbox`);
+  };
 
-    const navigateToLessonEdit = (lessonId: string) => {
-        navigate(`/dashboard/lesson/${lessonId}/edit`);
-    };
+  const navigateToLessonDetails = (lessonId: string) => {
+    navigate(`/dashboard/lesson/${lessonId}/details`);
+  };
 
-    const navigateToLessonStudents = (lessonId: string) => {
-        navigate(`/dashboard/lesson/${lessonId}/students`);
-    };
+  const navigateToLessonEdit = (lessonId: string) => {
+    navigate(`/dashboard/lesson/${lessonId}/edit`);
+  };
 
-    const navigateToLessonMyWork = (lessonId: string) => {
-        navigate(`/dashboard/lesson/${lessonId}/my-work`);
-    };
+  const navigateToLessonStudents = (lessonId: string) => {
+    navigate(`/dashboard/lesson/${lessonId}/students`);
+  };
 
-    return { 
-        navigateToDashboard, 
-        navigateToLogin, 
-        navigateToDiary,
-        navigateToHomeworks,
-        navigateToSubjects,
-        navigateToAnnouncements,
-        navigateToInbox,
-        navigateToLessonDetails,
-        navigateToLessonEdit,
-        navigateToLessonStudents,
-        navigateToLessonMyWork,
-    };
-}
+  const navigateToLessonMyWork = (lessonId: string) => {
+    navigate(`/dashboard/lesson/${lessonId}/my-work`);
+  };
+
+  return {
+    navigateToDashboard,
+    navigateToLogin,
+    navigateToDiary,
+    navigateToHomeworks,
+    navigateToSubjects,
+    navigateToAnnouncements,
+    navigateToInbox,
+    navigateToLessonDetails,
+    navigateToLessonEdit,
+    navigateToLessonStudents,
+    navigateToLessonMyWork,
+    navigateToSubject,
+  };
+};
