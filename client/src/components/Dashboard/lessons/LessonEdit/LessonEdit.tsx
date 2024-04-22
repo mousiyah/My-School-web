@@ -1,23 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { lessonApi } from 'api/routes';
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { lessonApi } from "api/routes";
 
-import Loading from 'components/common/Loading';
-import LessonEditClasswork from './LessonEditClasswork';
-import LessonEditHomework from './LessonEditHomework';
-import LessonData from '../LessonDetails';
+import Loading from "components/common/Loading";
+import LessonEditClasswork from "./LessonEditClasswork";
+import LessonEditHomework from "./LessonEditHomework";
+import LessonData from "../LessonData";
 
 interface Lesson {
   id: number;
   date: string;
   order: number;
   subject: {
-    id: number,
-    name: string
+    id: number;
+    name: string;
   };
   group: {
-    id: number,
-    name: string
+    id: number;
+    name: string;
   };
   room: string;
   homework: Homework;
@@ -46,19 +46,20 @@ const LessonEdit: React.FC = () => {
   const fetchLesson = async () => {
     try {
       const lessonData = await lessonApi.getLesson(lessonId);
-  
+
       // Create empty homework if not present
-      const lessonHomework = lessonData.homework ? lessonData.homework : 
-      { id: null, name: "", description: "", isSubmittable: false };
+      const lessonHomework = lessonData.homework
+        ? lessonData.homework
+        : { id: null, name: "", description: "", isSubmittable: false };
 
       // Create empty classwork if not present
-      const lessonClasswork = lessonData.classwork ? lessonData.classwork : 
-      { id: null, name: "", description: "" };
-  
+      const lessonClasswork = lessonData.classwork
+        ? lessonData.classwork
+        : { id: null, name: "", description: "" };
+
       setLesson(lessonData);
       setHomework(lessonHomework);
       setClasswork(lessonClasswork);
-      
     } catch (error) {
       // Handle error
       console.error(error);
@@ -67,19 +68,21 @@ const LessonEdit: React.FC = () => {
 
   const saveLesson = async () => {
     try {
-
       const updatedHomework = homework && homework.name != "" ? homework : null;
-      const updatedClasswork = classwork && classwork.name != "" ? classwork : null;
-  
+      const updatedClasswork =
+        classwork && classwork.name != "" ? classwork : null;
+
       // Update lesson with new homework and classwork
       const updatedLesson: Lesson = {
         ...lesson,
         homework: updatedHomework,
-        classwork: updatedClasswork
+        classwork: updatedClasswork,
       };
 
       const response = await lessonApi.saveLesson(updatedLesson);
-      console.log(response)
+      const modal = document.getElementById("lessonSaved") as HTMLDialogElement;
+      modal.showModal();
+      console.log(response);
     } catch (error) {
       // Handle error
       console.error(error);
@@ -92,33 +95,45 @@ const LessonEdit: React.FC = () => {
 
   return (
     <div className="w-full h-full p-10">
-      
       {/* Lesson details */}
-      {lesson ? (
-        <LessonData lesson={lesson} />
-      ) : (
-        <Loading/>
-      )}
+      {lesson ? <LessonData lesson={lesson} /> : <Loading />}
 
       {/* Classwork section */}
       {classwork ? (
-        <LessonEditClasswork classwork={classwork} setClasswork={setClasswork} />
+        <LessonEditClasswork
+          classwork={classwork}
+          setClasswork={setClasswork}
+        />
       ) : (
-        <Loading/>
+        <Loading />
       )}
 
       {/* Homework section */}
       {homework ? (
-        <LessonEditHomework homework={homework} setHomework={setHomework}/>
+        <LessonEditHomework homework={homework} setHomework={setHomework} />
       ) : (
-        <Loading/>
+        <Loading />
       )}
 
       {/* Button to save changes */}
       <div className="mt-5">
-        <button onClick={saveLesson} className="btn btn-primary text-white">Save changes</button>
+        <button onClick={saveLesson} className="btn btn-primary text-white">
+          Save changes
+        </button>
       </div>
 
+      {/* Successfull modal */}
+      <dialog id="lessonSaved" className="modal">
+        <div className="modal-box">
+          <h3 className="font-bold text-lg">Success</h3>
+          <p className="py-4">Lesson details are saved!</p>
+          <div className="modal-action">
+            <form method="dialog">
+              <button className="btn">Close</button>
+            </form>
+          </div>
+        </div>
+      </dialog>
     </div>
   );
 };

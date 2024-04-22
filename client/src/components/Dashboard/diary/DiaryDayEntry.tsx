@@ -77,10 +77,10 @@ const DiaryDayEntry: React.FC<DiaryEntryProps> = ({ entry }) => {
     await homeworkApi.setHomeworkCompleted(homework.id, !isHomeworkChecked);
   };
 
-  const { navigateToLessonEdit } = useNavigate();
+  const { navigateToLessonStudents, navigateToLessonDetails } = useNavigate();
 
   const onEditButtonClick = async () => {
-    navigateToLessonEdit(lessonId);
+    navigateToLessonStudents(lessonId);
   };
 
   return (
@@ -88,7 +88,10 @@ const DiaryDayEntry: React.FC<DiaryEntryProps> = ({ entry }) => {
       <div className="flex">
         <div className="flex-grow p-1">
           <span className="text-xs font-semibold">{order}. </span>
-          <span className="text-xs font-semibold cursor-pointer hover:underline">
+          <span
+            onClick={() => navigateToLessonDetails(lessonId)}
+            className="text-xs font-semibold cursor-pointer hover:underline"
+          >
             {subject.name}
           </span>
           <div className="text-xxs text-gray-500">

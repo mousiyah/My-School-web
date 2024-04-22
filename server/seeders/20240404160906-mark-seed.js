@@ -22,23 +22,23 @@ module.exports = {
       const classwork = await lesson.getClasswork();
 
       for (const student of students) {
-        if (Math.random() < 0.5) {
-          marksData.push({
-            studentId: student.id,
-            value: getRandomMark(),
-            relatedType: "lesson",
-            relatedId: lesson.id,
-            createdAt: new Date(),
-            updatedAt: new Date(),
-          });
-        }
-
         if (homework && Math.random() < 0.5) {
           marksData.push({
             studentId: student.id,
             value: getRandomMark(),
             relatedType: "homework",
             relatedId: homework.id,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          });
+        }
+
+        if (Math.random() < 0.5) {
+          marksData.push({
+            studentId: student.id,
+            value: getRandomMark(),
+            relatedType: "lesson",
+            relatedId: lesson.id,
             createdAt: new Date(),
             updatedAt: new Date(),
           });

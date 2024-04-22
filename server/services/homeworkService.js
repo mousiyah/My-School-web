@@ -6,7 +6,45 @@ module.exports = {
   getStudentHomework,
   updateHomework,
   updateClasswork,
+  submitHomework,
+  getStudentHomeworkSubmissionFile,
 };
+
+async function getStudentHomeworkSubmissionFile(teacher, studentId, lessonId) {
+  try {
+    const lesson = await db.lesson.findByPk(lessonId);
+    const homework = await lesson.getHomework();
+    console.log(lessonId);
+    console.log(studentId);
+
+    const studentHomework = await db.studentHomework.findOne({
+      where: { studentId: studentId, homeworkId: homework.id },
+    });
+
+    const filepath = studentHomework.file;
+    return filepath;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function submitHomework(student, homeworkId, file) {
+  try {
+    console.log("Received file: ", file.filename);
+    console.log("homeworkId:", homeworkId);
+
+    const studentHomework = await db.studentHomework.findOne({
+      where: { studentId: student.id, homeworkId: homeworkId },
+    });
+
+    if (studentHomework) {
+      studentHomework.file = file.filename;
+      await studentHomework.save();
+    }
+  } catch (error) {
+    throw error;
+  }
+}
 
 async function setHomeworkCompleted(student, homeworkId, isCompleted) {
   try {

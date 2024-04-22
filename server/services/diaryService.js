@@ -94,7 +94,7 @@ async function getStudentDiaryEntry(lesson, studentId) {
               : null,
           }
         : null,
-      mark: lesson.mark
+      mark: lessonMark
         ? {
             id: lessonMark.id,
             value: lessonMark.value,

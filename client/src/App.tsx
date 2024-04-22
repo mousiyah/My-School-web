@@ -32,7 +32,7 @@ import Homeworks from "components/dashboard/homeworks/Homeworks";
 import Lesson from "components/dashboard/lessons/Lesson";
 import LessonEdit from "components/dashboard/lessons/LessonEdit/LessonEdit";
 import LessonStudents from "components/dashboard/lessons/LessonStudents/LessonStudents";
-import LessonMyWork from "components/dashboard/lessons/LessonMyWork";
+import LessonDetails from "components/dashboard/lessons/LessonDetails";
 
 const App: React.FC = () => {
   const { loading } = useAuth();
@@ -151,10 +151,10 @@ const App: React.FC = () => {
 
           {roleAllowedFor(USER_ROLES.STUDENT) && (
             <Route
-              path="/dashboard/lesson/:lessonId/my-work"
+              path="/dashboard/lesson/:lessonId/details"
               element={
                 <RequireAuth fallbackPath={"/login"}>
-                  <LessonMyWork />
+                  <LessonDetails />
                 </RequireAuth>
               }
             />

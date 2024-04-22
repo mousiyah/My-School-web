@@ -48,10 +48,6 @@ export const useNavigate = () => {
     navigate(`/dashboard/lesson/${lessonId}/students`);
   };
 
-  const navigateToLessonMyWork = (lessonId: string) => {
-    navigate(`/dashboard/lesson/${lessonId}/my-work`);
-  };
-
   return {
     navigateToDashboard,
     navigateToLogin,
@@ -63,7 +59,6 @@ export const useNavigate = () => {
     navigateToLessonDetails,
     navigateToLessonEdit,
     navigateToLessonStudents,
-    navigateToLessonMyWork,
     navigateToSubject,
   };
 };

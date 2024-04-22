@@ -2,20 +2,13 @@
 
 const Sequelize = require("sequelize");
 const faker = require("faker");
-const {
-  groupSubject,
-  student,
-  room,
-  lesson,
-  teacherSubject,
-} = require("../models");
+const { groupSubject, student, room, lesson } = require("../models");
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
     const attendanceData = [];
 
-    const subjects = await groupSubject.findAll();
     const rooms = await room.findAll();
 
     const firstStudent = await student.findOne({
@@ -25,16 +18,24 @@ module.exports = {
     const group = await firstStudent.getGroup();
     const students = await group.getStudents();
 
+    const groupSubjects = await groupSubject.findAll({
+      where: {
+        groupId: group.id,
+      },
+    });
+
     for (let month = 1; month <= 12; month++) {
       const daysInMonth = new Date(2024, month, 0).getDate();
 
       for (let day = 1; day <= daysInMonth; day++) {
-        const lessonsPerDay = faker.datatype.number({ min: 4, max: 5 });
+        const lessonsPerDay = await faker.datatype.number({ min: 4, max: 5 });
 
         for (let order = 1; order <= lessonsPerDay; order++) {
-          const randomSubject = faker.random.arrayElement(subjects);
+          const randomGroupSubject = await faker.random.arrayElement(
+            groupSubjects
+          );
           const randomRoom = await faker.random.arrayElement(rooms);
-          const randomTeacher = await randomSubject.getTeacher();
+          const randomTeacher = await randomGroupSubject.getTeacher();
           const date = new Date(
             `2024-${month.toString().padStart(2, "0")}-${day
               .toString()
@@ -42,7 +43,7 @@ module.exports = {
           );
 
           const newLesson = await lesson.create({
-            groupSubjectId: randomSubject.id,
+            groupSubjectId: randomGroupSubject.id,
             groupId: group.id,
             roomId: randomRoom.id,
             teacherId: randomTeacher.id,

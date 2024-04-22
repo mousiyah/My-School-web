@@ -1,45 +1,161 @@
-import React from 'react';
-import { LESSON_TIME_MAP } from 'constants/time';
-import { FaRegBookmark } from "react-icons/fa6";
+import { homeworkApi, lessonApi } from "api/routes";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import LessonData from "./LessonData";
+import Loading from "components/common/Loading";
+import { FileSelector } from "components/common/FileSelector";
 
 interface Lesson {
+  id: string;
   date: string;
   order: number;
-  room: string;
-  group: {
-    id: number;
-    name: string;
-  };
   subject: {
     id: number;
     name: string;
   };
+  group: {
+    id: number;
+    name: string;
+  };
+  room: string;
+  homework: Homework;
+  classwork: Classwork;
 }
 
-const LessonData: React.FC<{ lesson: Lesson }> = ({ lesson }) => {
+interface Classwork {
+  id: string;
+  name: string;
+  description: string;
+}
+
+interface Homework {
+  id: string;
+  name: string;
+  description: string;
+  isSubmittable: boolean;
+}
+
+const LessonDetails: React.FC = () => {
+  const { lessonId } = useParams<{ lessonId: string }>();
+  const [lesson, setLesson] = useState<Lesson>();
+  const [homework, setHomework] = useState<Homework | null>(null);
+  const [classwork, setClasswork] = useState<Classwork | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
+  useEffect(() => {
+    fetchLesson();
+  }, [lessonId]);
+
+  const fetchLesson = async () => {
+    try {
+      const lessonData = await lessonApi.getLesson(lessonId);
+
+      // Create empty homework if not present
+      const lessonHomework = lessonData.homework
+        ? lessonData.homework
+        : { id: null, name: "", description: "", isSubmittable: false };
+
+      // Create empty classwork if not present
+      const lessonClasswork = lessonData.classwork
+        ? lessonData.classwork
+        : { id: null, name: "", description: "" };
+
+      setLesson(lessonData);
+      setHomework(lessonData.homework || null);
+      setClasswork(lessonData.classwork || null);
+    } catch (error) {
+      // Handle error
+      console.error(error);
+    }
+  };
+
+  const handleHomeworkFileChange = (file: File | null) => {
+    setSelectedFile(file);
+  };
+
+  const handleHomeworkSubmission = async () => {
+    try {
+      if (!selectedFile) {
+        return;
+      }
+
+      const response = await homeworkApi.submitHomework(
+        homework.id,
+        selectedFile
+      );
+
+      const modal = document.getElementById("my_modal_1") as HTMLDialogElement;
+      modal.showModal();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
-    <div className="border border-gray-300 rounded p-4">
-      
-      <div className="mb-4 flex items-center">
-        <div  className="mr-3 bg-accent rounded-full text-white p-2">
-          <FaRegBookmark size={16}/>
+    <div className="w-full h-full p-10">
+      {/* Lesson details */}
+      {lesson ? <LessonData lesson={lesson} /> : <Loading />}
+
+      {/* Homework details */}
+      {homework && (
+        <div className="border border-gray-300 rounded p-4 mt-4">
+          <h2 className="text-xl font-semibold mb-2">Homework</h2>
+          <p>
+            <span className="font-medium">{homework.name}</span>
+          </p>
+
+          {homework.isSubmittable && (
+            <div>
+              <FileSelector
+                label="Upload your homework submission"
+                onChange={handleHomeworkFileChange}
+              />
+              <button
+                className="btn btn-md btn-success text-white mt-4"
+                onClick={handleHomeworkSubmission}
+              >
+                Submit Homework
+              </button>
+            </div>
+          )}
+
+          <br></br>
+          <p>
+            <span className="font-bold">Description:</span>{" "}
+            {homework.description}
+          </p>
         </div>
-        <span className="text-xl text-accent md:text-2xl font-semibold ">Lesson Details</span>
-      </div>
+      )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2">
-        <p className="flex items-center"><span className="font-medium mr-2">Date:</span> 
-        {new Date(lesson.date).toDateString()}</p>
+      {/* Classwork details */}
+      {classwork && (
+        <div className="border border-gray-300 rounded p-4 mt-4">
+          <h2 className="text-xl font-semibold mb-2">Classwork</h2>
+          <p>
+            <span className="font-bold"> {classwork.name}</span>
+          </p>
+          <br></br>
+          <p>
+            <span className="font-bold">Description:</span>{" "}
+            {classwork.description}
+          </p>
+        </div>
+      )}
 
-        <p className="flex items-center"><span className="font-medium mr-2">Time:</span>
-        <span className="px-2 py-1 bg-accent text-white rounded">{LESSON_TIME_MAP[lesson.order]}</span></p>
-
-        <p className="flex items-center"><span className="font-medium mr-2">Room:</span> {lesson.room}</p>
-        <p className="flex items-center"><span className="font-medium mr-2">Group:</span> {lesson.group.name}</p>
-        <p className="flex items-center"><span className="font-medium mr-2">Subject:</span> {lesson.subject.name}</p>
-      </div>
+      {/* Successfull modal */}
+      <dialog id="my_modal_1" className="modal">
+        <div className="modal-box">
+          <h3 className="font-bold text-lg">Success</h3>
+          <p className="py-4">Homework Submitted!</p>
+          <div className="modal-action">
+            <form method="dialog">
+              <button className="btn">Close</button>
+            </form>
+          </div>
+        </div>
+      </dialog>
     </div>
   );
 };
 
-export default LessonData;
+export default LessonDetails;

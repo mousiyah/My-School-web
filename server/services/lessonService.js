@@ -2,11 +2,17 @@ const db = require("../models");
 const homeworkService = require("./homeworkService");
 
 module.exports = {
+  getLessonById,
   getTeacherLesson,
+  getStudentLesson,
   getLessonsForDayByGroupId,
   getLessonsForDayByTeacherId,
   saveLesson,
   getLessonGroup,
+  setAttended,
+  setLessonMark,
+  setLessonHomeworkMark,
+  setLessonClassworkMark,
 };
 
 async function getLessonById(lessonId) {
@@ -25,7 +31,8 @@ async function isLessonTeacher(lesson, teacher) {
 }
 
 async function getLessonData(lesson) {
-  const lessonSubject = await lesson.getGroupSubject();
+  const lessonGroupSubject = await lesson.getGroupSubject();
+  const lessonSubject = await lessonGroupSubject.getSubject();
   const lessonGroup = await lesson.getGroup();
   const lessonRoom = await lesson.getRoom();
   const lessonHomework = await lesson.getHomework();
@@ -36,8 +43,8 @@ async function getLessonData(lesson) {
     date: lesson.date,
     order: lesson.order,
     subject: {
-      id: lessonSubject ? lessonSubject.id : null,
-      name: lessonSubject ? lessonSubject.name : null,
+      id: lessonGroupSubject ? lessonGroupSubject.id : null,
+      name: lessonGroupSubject ? lessonSubject.name : null,
     },
     group: {
       id: lessonGroup ? lessonGroup.id : null,
@@ -75,6 +82,16 @@ async function getTeacherLesson(teacher, lessonId) {
   }
 }
 
+async function getStudentLesson(student, lessonId) {
+  try {
+    const lesson = await getLessonById(lessonId);
+    const lessonData = await getLessonData(lesson);
+    return lessonData;
+  } catch (error) {
+    throw new Error("Failed to fetch lesson: " + error.message);
+  }
+}
+
 async function saveLesson(lessonData) {
   try {
     const lesson = await getLessonById(lessonData.id);
@@ -83,6 +100,113 @@ async function saveLesson(lessonData) {
     await homeworkService.updateClasswork(lesson, lessonData.classwork);
 
     return { success: true, message: "Lesson updated successfully" };
+  } catch (error) {
+    throw new Error("Failed to save lesson: " + error.message);
+  }
+}
+
+async function setAttended(teacher, studentId, lessonId, attended) {
+  try {
+    const attendance = await db.attendance.findOne({
+      where: {
+        studentId: studentId,
+        lessonId: lessonId,
+      },
+    });
+    attendance.attended = attended;
+    await attendance.save();
+    return { success: true, message: "Attendance updated successfully" };
+  } catch (error) {
+    throw new Error("Failed to save lesson: " + error.message);
+  }
+}
+
+async function setLessonMark(teacher, studentId, lessonId, value) {
+  try {
+    let mark = await db.mark.findOne({
+      where: {
+        studentId: studentId,
+        relatedId: lessonId,
+        relatedType: "lesson",
+      },
+    });
+
+    if (mark) {
+      mark.value = value;
+    } else {
+      mark = await db.mark.create({
+        studentId: studentId,
+        relatedId: lessonId,
+        relatedType: "lesson",
+        value: value,
+      });
+    }
+
+    await mark.save();
+
+    return { success: true, message: "Mark updated successfully" };
+  } catch (error) {
+    throw new Error("Failed to save lesson: " + error.message);
+  }
+}
+
+async function setLessonHomeworkMark(teacher, studentId, lessonId, value) {
+  try {
+    const lesson = await getLessonById(lessonId);
+    const homework = await lesson.getHomework();
+    let mark = await db.mark.findOne({
+      where: {
+        studentId: studentId,
+        relatedId: homework.id,
+        relatedType: "homework",
+      },
+    });
+
+    if (mark) {
+      mark.value = value;
+    } else {
+      mark = await db.mark.create({
+        studentId: studentId,
+        relatedId: homework.id,
+        relatedType: "homework",
+        value: value,
+      });
+    }
+
+    await mark.save();
+
+    return { success: true, message: "Mark updated successfully" };
+  } catch (error) {
+    throw new Error("Failed to save lesson: " + error.message);
+  }
+}
+
+async function setLessonClassworkMark(teacher, studentId, lessonId, value) {
+  try {
+    const lesson = await getLessonById(lessonId);
+    const classwork = await lesson.getClasswork();
+    let mark = await db.mark.findOne({
+      where: {
+        studentId: studentId,
+        relatedId: classwork.id,
+        relatedType: "classwork",
+      },
+    });
+
+    if (mark) {
+      mark.value = value;
+    } else {
+      mark = await db.mark.create({
+        studentId: studentId,
+        relatedId: classwork.id,
+        relatedType: "classwork",
+        value: value,
+      });
+    }
+
+    await mark.save();
+
+    return { success: true, message: "Mark updated successfully" };
   } catch (error) {
     throw new Error("Failed to save lesson: " + error.message);
   }
@@ -141,13 +265,11 @@ async function getLessonGroup(teacher, lessonId) {
     const lessonClasswork = await lesson.getClasswork();
 
     const lessonGroupStudents = [];
-
     for (const student of students) {
       const studentUser = await student.getUser();
       const attendance = await db.attendance.findOne({
         where: { studentId: student.id, lessonId: lesson.id },
       });
-
       const hwMark = lessonHomework
         ? await db.mark.findOne({
             where: {
@@ -157,7 +279,6 @@ async function getLessonGroup(teacher, lessonId) {
             },
           })
         : null;
-
       const cwMark = lessonClasswork
         ? await db.mark.findOne({
             where: {
@@ -167,7 +288,6 @@ async function getLessonGroup(teacher, lessonId) {
             },
           })
         : null;
-
       const lessonMark = await db.mark.findOne({
         where: {
           studentId: student.id,
@@ -175,20 +295,25 @@ async function getLessonGroup(teacher, lessonId) {
           relatedType: "lesson",
         },
       });
-
+      let filename;
+      if (lessonHomework) {
+        const studentHomework = await db.studentHomework.findOne({
+          where: { studentId: student.id, homeworkId: lessonHomework.id },
+        });
+        filename = studentHomework.file;
+      }
       lessonGroupStudents.push({
         id: student.id,
         name: studentUser.fullname,
         attended: attendance.attended,
         hwSubmission: {
-          id: 0, // EDIT
+          filename: filename,
         },
         hwMark: hwMark ? hwMark.value : null,
         cwMark: cwMark ? cwMark.value : null,
         lessonMark: lessonMark ? lessonMark.value : null,
       });
     }
-
     const lessonGroupData = {
       group: {
         id: group.id,

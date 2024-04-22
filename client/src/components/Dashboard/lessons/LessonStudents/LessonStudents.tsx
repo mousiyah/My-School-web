@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import LessonGroupDetails from "./LessonGroupDetails";
 import Loading from "components/common/Loading";
-import { lessonApi } from "api/routes";
+import { homeworkApi, lessonApi } from "api/routes";
+import FileDisplay from "components/common/FileDisplay";
+import MarkInput from "./MarkInput";
 
 interface LessonGroup {
   group: {
@@ -19,7 +21,7 @@ interface Student {
   name: number;
   attended: boolean;
   hwSubmission: {
-    id: number;
+    filename: string;
   };
   hwMark: number;
   cwMark: number;
@@ -34,17 +36,17 @@ const LessonStudents: React.FC = () => {
   const [absentStudents, setAbsentStudents] = useState<number>(0);
 
   useEffect(() => {
-    const fetchLessonData = async () => {
-      try {
-        const lessonData = await lessonApi.getLessonGroupData(lessonId);
-        setLessonGroup(lessonData);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
     fetchLessonData();
   }, []);
+
+  const fetchLessonData = async () => {
+    try {
+      const lessonData = await lessonApi.getLessonGroupData(lessonId);
+      setLessonGroup(lessonData);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
     if (lessonGroup) {
@@ -65,21 +67,46 @@ const LessonStudents: React.FC = () => {
     setAbsentStudents(absent);
   };
 
-  const togglePresence = (studentId: number) => {
-    setLessonGroup((prevLessonGroup) => {
-      const updatedStudents = prevLessonGroup.students.map((student) => {
-        if (student.id === studentId) {
-          return { ...student, attended: !student.attended };
-        }
-        return student;
-      });
-      return { ...prevLessonGroup, students: updatedStudents };
-    });
+  const togglePresence = async (studentId: number, attended: boolean) => {
+    await lessonApi.setAttended(studentId, lessonId, attended);
+    await fetchLessonData();
   };
 
   if (!lessonGroup) {
     return <Loading />;
   }
+
+  const onHomeworkMarkSelect = async (studentId: number, markValue: number) => {
+    await lessonApi.setLessonHomeworkMark(studentId, lessonId, markValue);
+    await fetchLessonData();
+  };
+
+  const onClassworkMarkSelect = async (
+    studentId: number,
+    markValue: number
+  ) => {
+    await lessonApi.setLessonClassworkMark(studentId, lessonId, markValue);
+    await fetchLessonData();
+  };
+
+  const onLessonMarkSelect = async (studentId: number, markValue: number) => {
+    await lessonApi.setLessonMark(studentId, lessonId, markValue);
+    await fetchLessonData();
+  };
+
+  const viewSubmission = async (student: Student) => {
+    // const filepath = await homeworkApi.getStudentHomeworkSubmissionFile(
+    //   studentId,
+    //   lessonId
+    // );
+    // setSelectedFilePath(filepath);
+
+    // Open modal
+    const modal = document.getElementById(
+      student.id.toLocaleString()
+    ) as HTMLDialogElement;
+    modal.showModal();
+  };
 
   return (
     <div className="w-full h-full p-10">
@@ -121,7 +148,9 @@ const LessonStudents: React.FC = () => {
                         ? "bg-white text-inherit border border-gray-300 hover:bg-gray-100"
                         : "bg-red-600 text-white hover:bg-red-700"
                     } w-fit px-1 rounded`}
-                    onClick={() => togglePresence(student.id)}
+                    onClick={() =>
+                      togglePresence(student.id, !student.attended)
+                    }
                   >
                     <span className="">
                       {student.attended ? "present" : "absent"}
@@ -130,38 +159,62 @@ const LessonStudents: React.FC = () => {
                 </td>
 
                 {/* Render homework submission */}
-                <td>
-                  <a href="#" className="text-primary underline">
-                    View Submission
-                  </a>
-                </td>
+                {student.hwSubmission.filename ? (
+                  <td>
+                    <a
+                      onClick={() => viewSubmission(student)}
+                      className="text-primary underline"
+                    >
+                      View Submission
+                    </a>
+                  </td>
+                ) : (
+                  <td>No submission</td>
+                )}
 
                 {/* Render input fields for homework mark, classwork mark, and lesson mark */}
                 <td>
-                  <input
-                    type="text"
+                  <MarkInput
                     value={student.hwMark}
-                    className="input w-8 text-center input-bordered input-xs w-full max-w-xs"
                     disabled={!lessonGroup.hasHomework}
+                    onSelect={(value) =>
+                      onHomeworkMarkSelect(student.id, value)
+                    }
                   />
                 </td>
 
                 <td>
-                  <input
-                    type="text"
+                  <MarkInput
                     value={student.cwMark}
-                    className="input w-8 text-center input-bordered input-xs w-full max-w-xs"
                     disabled={!lessonGroup.hasClasswork}
+                    onSelect={(value) =>
+                      onClassworkMarkSelect(student.id, value)
+                    }
                   />
                 </td>
 
                 <td>
-                  <input
-                    type="text"
+                  <MarkInput
                     value={student.lessonMark}
-                    className="input w-8 text-center input-bordered input-xs w-full max-w-xs"
+                    disabled={false}
+                    onSelect={(value) => onLessonMarkSelect(student.id, value)}
                   />
                 </td>
+
+                {/* Student homework submission modal */}
+                <dialog id={student.id.toLocaleString()} className="modal">
+                  <div className="bg-white p-10 w-2/3 card">
+                    <h3 className="font-bold text-lg mb-5">
+                      Homework submission
+                    </h3>
+                    <FileDisplay filePath={student.hwSubmission.filename} />
+                    <div className="modal-action">
+                      <form method="dialog">
+                        <button className="btn">Close</button>
+                      </form>
+                    </div>
+                  </div>
+                </dialog>
               </tr>
             ))}
           </tbody>

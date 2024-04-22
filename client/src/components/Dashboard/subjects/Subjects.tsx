@@ -13,10 +13,12 @@ interface Subject {
   id: string;
   name: string;
   teacher: string;
+  averageAttendance: number;
+  averageMark: number;
 }
 
 const Subjects: React.FC = () => {
-  const [subjectsList, setSubjectsList] = useState<Subject[]>([]);
+  const [subjectsList, setSubjectsList] = useState<Subject[]>(null);
 
   useEffect(() => {
     fetchSubjectList();
@@ -29,37 +31,36 @@ const Subjects: React.FC = () => {
     setSubjectsList(subjects);
   };
 
-  // Function to generate a random pastel color code
   const getRandomPastelColor = () => {
-    const hue = Math.floor(Math.random() * 360); // Random hue
-    const saturation = Math.floor(Math.random() * 21) + 30; // Saturation between 80 and 100
-    const lightness = Math.floor(Math.random() * 21) + 50; // Lightness between 70 and 90
+    const hue = Math.floor(Math.random() * 360);
+    const saturation = Math.floor(Math.random() * 21) + 30;
+    const lightness = Math.floor(Math.random() * 21) + 50;
     return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
   };
 
-  // Calculate the initial layout for each subject item
   const generateLayout = () => {
     return subjectsList.map((subject, index) => ({
       i: String(index),
-      x: index % 3, // Distribute items in 3 columns
-      y: Math.floor(index / 3), // Place items in rows
-      w: 1, // Each item occupies 3 columns
-      h: 1.5, // Each item is 2 units tall
+      x: index % 3,
+      y: Math.floor(index / 3),
+      w: 1,
+      h: 1.5,
     }));
   };
 
-  // Function to handle card click
   const handleCardClick = (subjectId: string) => {
     navigateToSubject(subjectId);
   };
 
-  // Function to handle click on drag handler
   const handleDragHandleClick = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
-    // Prevent click event propagation to avoid triggering the card click event
     event.stopPropagation();
   };
+
+  if (!subjectsList) {
+    return <Loading />;
+  }
 
   return (
     <div className="flex w-full items-center py-10 px-10">
@@ -81,7 +82,7 @@ const Subjects: React.FC = () => {
             <div
               key={index}
               className="card hover:shadow-lg mb-6 sm:m-0"
-              onClick={() => handleCardClick(subject.id)}
+              onClick={() => handleCardClick(subject.name)}
             >
               <div
                 className="flex justify-between card-content p-4 rounded-t-md"
@@ -107,9 +108,13 @@ const Subjects: React.FC = () => {
               </div>
 
               <div className="p-4">
-                <span className="text-xs">Attendance: 83%</span>
+                <span className="text-xs">
+                  Average attendance: {subject.averageAttendance}%
+                </span>
                 <br />
-                <span className="text-xs">Average grade: 58%</span>
+                <span className="text-xs">
+                  Average mark: {subject.averageMark}
+                </span>
               </div>
             </div>
           ))
