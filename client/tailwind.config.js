@@ -24,7 +24,7 @@ module.exports = {
           "primary-dark": "#4646a0",
           "primary-light": "#ededf7",
           //"primary-content": "",
-          secondary: "", // Required
+          secondary: "#e0e7ff", // Required
           //"secondary-content": "",
           accent: "#ff8c80", // Required
           //"accent-content": "",
@@ -51,6 +51,7 @@ module.exports = {
           "primary-dark": "#4646a0",
           "primary-light": "#2b3440",
           "base-100": "#292524",
+          secondary: "#a6adbb",
         },
       },
     ],
