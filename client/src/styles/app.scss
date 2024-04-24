@@ -4,23 +4,22 @@ $theme-colors: (
 
 /* Fonts */
 @font-face {
-  font-family: 'Unicorn';
-  src: url('../fonts/unicorn.ttf') format('truetype');
+  font-family: "Unicorn";
+  src: url("../fonts/unicorn.ttf") format("truetype");
 }
 @font-face {
-  font-family: 'Google Sans';
-  src: url('../fonts/ProductSans-Light.ttf') format('truetype');
+  font-family: "Google Sans";
+  src: url("../fonts/ProductSans-Light.ttf") format("truetype");
 }
 
-.body{
-  font-family: 'Google Sans';
+.body {
+  font-family: "Google Sans";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 .logo {
-  font-family: 'Unicorn', sans-serif;
+  font-family: "Unicorn", sans-serif;
   font-size: 4em;
   font-weight: normal;
-  color: map-get($theme-colors, "primary");
 }

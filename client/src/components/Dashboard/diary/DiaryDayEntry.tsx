@@ -171,7 +171,7 @@ const DiaryDayEntry: React.FC<DiaryEntryProps> = ({ entry }) => {
 
       {/* Homework */}
       {homework && (
-        <div className="bg-indigo-100 py-0.5 px-1 rounded flex items-baseline cursor-pointer">
+        <div className="bg-indigo-100 text-black py-0.5 px-1 rounded flex items-baseline cursor-pointer">
           {userRole === USER_ROLES.STUDENT && (
             <div className="flex cursor-pointer">
               <input

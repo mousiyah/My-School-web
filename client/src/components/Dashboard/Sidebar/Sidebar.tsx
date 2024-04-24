@@ -80,7 +80,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
   return (
     <div
       className={`overflow-y-auto h-full border-box 
-                  bg-white py-2 pr-2 border-r border-gray-300
+                  py-2 pr-2 border-r border-gray-300
                   transition-all duration-100 ease-in-out
                   ${
                     isOpen
